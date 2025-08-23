@@ -1,104 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Meme-Coin – Coming Soon</title>
-  <meta name="description" content="Meme-Coin – Website under construction. Contact us at meme@meme-coin.no." />
-  <meta property="og:title" content="Meme-Coin – Coming Soon" />
-  <meta property="og:description" content="The website is under construction. Contact us at meme@meme-coin.no." />
-  <meta name="theme-color" content="#111827" />
-  <style>
-    :root {
-      --bg: #0f1220;
-      --panel: #131833;
-      --text: #e6e8ef;
-      --muted: #aab0c0;
-      --accent: #7bdcff;
-      --border: #2c3356;
-      --radius: 16px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0; display: grid; place-items: center; min-height: 100vh;
-      background: radial-gradient(1200px 600px at 20% 0%, #172041 0%, var(--bg) 50%),
-                  radial-gradient(1000px 500px at 100% 100%, #1a2347 0%, var(--bg) 60%);
-      color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      padding: 24px;
-    }
-    main {
-      width: 100%; max-width: 820px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-      border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: clamp(24px, 4vw, 48px); text-align: center; position: relative; overflow: hidden;
-    }
-    .logo {
-      display: inline-flex; align-items: center; gap: 10px; margin-bottom: 8px;
-      padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255,255,255,.02);
-      font-weight: 600; letter-spacing: .3px;
-    }
-    .logo-badge {
-      width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center;
-      background: conic-gradient(from 180deg at 50% 50%, #ffb703, #fb7185, #7bdcff, #a7f3d0, #ffb703);
-      filter: saturate(1.1);
-    }
-    h1 {
-      margin: 10px 0 12px; font-size: clamp(28px, 4.5vw, 46px); line-height: 1.15;
-    }
-    p { margin: 10px 0; line-height: 1.7; color: var(--text); }
-    .muted { color: var(--muted); }
-    .cta {
-      display: inline-block; margin-top: 18px; padding: 12px 16px; border-radius: 12px;
-      border: 1px solid var(--border); text-decoration: none;
-      color: var(--text); transition: transform .1s ease, background .2s ease;
-      background: rgba(255,255,255,.03);
-    }
-    .cta:hover { transform: translateY(-1px); }
-    a { color: var(--accent); }
-    nav {
-      margin-top: 28px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-    }
-    nav a, nav span {
-      padding: 8px 12px; border-radius: 10px; border: 1px dashed var(--border);
-      text-decoration: none; color: var(--muted); font-size: 14px;
-      background: rgba(255,255,255,.02);
-      cursor: default;
-    }
-    footer { margin-top: 28px; font-size: 12px; color: var(--muted); }
-    @media (prefers-reduced-motion: no-preference) {
-      .pulse { animation: pulse 2s ease-in-out infinite; }
-      @keyframes pulse {
-        0%, 100% { opacity: .7; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.02); }
-      }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meme Coin — Learn, Explore, Build</title>
+<meta name="description" content="A clean, fast hub for meme coin education and resources: glossary, value mechanics, liquidity pools, testimony, a featured project banner, and VIP Laser Squad application." />
+<meta name="theme-color" content="#0b1220" />
+<meta property="og:title" content="Meme Coin — Learn, Explore, Build" />
+<meta property="og:description" content="Glossary, value mechanics, liquidity pools, testimony, featured project banner, and VIP application." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%230b1220'/><text x='50%' y='52%' fill='%23ffffff' font-size='64' font-family='Arial, sans-serif' text-anchor='middle'>Meme Coin</text></svg>" />
+<style>
+:root{
+  --bg:#0b1220; --panel:#0f172a; --text:#e6edf3; --muted:#9fb0c3;
+  --accent:#7bdcff; --accent-2:#a7f3d0; --border:#233046;
+  --radius:18px; --shadow:0 18px 48px rgba(0,0,0,.40);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:
+  radial-gradient(1200px 600px at 10% -10%, #0f244f 0%, var(--bg) 55%),
+  radial-gradient(900px 500px at 110% 120%, #122a5c 0%, var(--bg) 60%),
+  var(--bg);
+  color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;line-height:1.6;
+}
+/* Header */
+.header{position:sticky;top:0;z-index:1000;
+  backdrop-filter:saturate(120%) blur(16px);
+  -webkit-backdrop-filter:saturate(120%) blur(16px);
+  background:rgba(9,15,26,.30); border-bottom:1px solid rgba(35,48,70,.6);
+}
+.header .inner{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px;text-decoration:none;color:var(--text)}
+.brand .wordmark{display:flex;flex-direction:column;line-height:1}
+.brand .name{font-size:18px}
+.brand .sub{font-size:12px;color:var(--muted)}
+nav.primary{display:flex;gap:4px;flex-wrap:wrap}
+nav.primary a{color:var(--muted);text-decoration:none;font-weight:700;padding:8px 12px;border-radius:999px}
+nav.primary a:hover{background:rgba(255,255,255,.06);color:var(--text)}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));color:var(--text);text-decoration:none;font-weight:800}
+.cta:hover{filter:brightness(1.05)}
+/* Hero */
+.hero{max-width:1200px;margin:0 auto;padding:24px 16px 12px;display:grid;gap:18px;grid-template-columns:1.15fr .85fr;align-items:center}
+.hero-card{border:1px solid var(--border);border-radius:26px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));box-shadow:var(--shadow)}
+.kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted);font-weight:800}
+h1{margin:10px 0 4px;font-size:clamp(28px,4.8vw,48px);line-height:1.1}
+.sub{color:var(--muted);margin:0 0 10px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.hero-visual{border:1px solid var(--border);border-radius:26px;padding:0;overflow:hidden;box-shadow:var(--shadow)}
+.canvas{aspect-ratio:16/10;display:grid;place-items:center;background:
+  radial-gradient(120% 120% at 120% -10%, rgba(123,220,255,.18), transparent 55%),
+  radial-gradient(80% 80% at -20% 110%, rgba(167,243,208,.13), transparent 55%),
+  #0a1326}
+.logo-wrap{position:relative;width:min(320px,70%);}
+/* Sections */
+.section{max-width:1200px;margin:0 auto;padding:12px 16px 24px}
+.section h2{font-size:clamp(20px,3.4vw,30px);margin:0 0 12px}
+.grid-3{display:grid;gap:12px;grid-template-columns:repeat(3, minmax(0,1fr))}
+.grid-2{display:grid;gap:12px;grid-template-columns:repeat(2, minmax(0,1fr))}
+@media (max-width:900px){.hero{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+.card{border:1px solid var(--border);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.02));padding:16px;box-shadow:var(--shadow);position:relative}
+.card:hover{transform:translateY(-1px)}
+.icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#223055,#0f1733);border:1px solid var(--border);position:absolute;top:-18px;left:16px}
+.card h3{margin:10px 0 6px;font-size:18px}
+.muted{color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted);font-weight:800}
+/* Link list cards */
+.links{display:grid;gap:10px}
+.link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.02);text-decoration:none;color:var(--text);font-weight:700}
+.link .right{color:var(--muted);font-size:12px}
+.link:hover{background:rgba(123,220,255,.10);border-color:rgba(123,220,255,.35)}
+/* Featured banner */
+.banner-wrap{border:1px dashed rgba(123,220,255,.35);border-radius:16px;padding:10px;background:rgba(255,255,255,.02)}
+.banner-wrap iframe{width:100%;height:130px;border:0;border-radius:12px;background:transparent}
+.banner-caption{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;color:var(--muted);font-size:12px}
+/* FAQ */
+details.faq{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.02);overflow:hidden}
+details.faq + details.faq{margin-top:10px}
+details.faq summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:800;display:flex;align-items:center;gap:10px}
+details.faq summary::-webkit-details-marker{display:none}
+.chev{width:10px;height:10px;display:inline-block;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .18s ease}
+details[open] .chev{transform:rotate(45deg)}
+.answer{padding:10px 14px;border-top:1px solid var(--border);color:var(--muted);background:rgba(11,18,32,.28)}
+/* Footer */
+footer{color:var(--muted);text-align:center;font-size:12px;margin:18px 0 28px}
+.footer-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.footer-links a{color:var(--muted);text-decoration:none;border-bottom:1px dotted rgba(159,176,195,.35)}
+.footer-links a:hover{color:var(--text)}
+
+.cta.vip{background:linear-gradient(180deg,#f7c66b,#b08d57);
+  border:1px solid #9c7a35;color:#0b1220;font-weight:900;}
+.cta.vip:hover{filter:brightness(1.08)}
+
+/* Motion */
+@media (prefers-reduced-motion:no-preference){
+  .card,.cta{transition:transform .18s ease, box-shadow .18s ease, filter .18s ease, background .18s ease, border-color .18s ease}
+  .link{transition:background .15s ease,border-color .15s ease}
+}
+</style>
 </head>
 <body>
-  <main>
-    <div class="logo" aria-label="Meme-Coin logo">
-      <div class="logo-badge" role="img" aria-hidden="true">✨</div>
-      MEME-COIN
-    </div>
-    <h1 class="pulse">Website Under Construction 🚧</h1>
-    <p>We are building a dictionary, a story of how the first meme coin was created, and an application form for those who wish to join.</p>
-    <p>In the meantime, you can reach us at <a href="mailto:meme@meme-coin.no">meme@meme-coin.no</a>.</p>
+<header class="header" role="banner">
+  <div class="inner">
+    <a class="brand" href="#top" aria-label="Meme Coin home">
+      <!-- Neutral inline SVG logo -->
+      
+<svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
+  <defs>
+    <radialGradient id="gearGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f7c66b" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#f7c66b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f7c66b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gearMetal" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#b08d57"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#gearGlow)" />
+  <g transform="translate(32 32)">
+    <circle r="18" fill="url(#gearMetal)" stroke="#704f1d" stroke-width="2"/>
+    <!-- Simple gear teeth -->
+    <g stroke="#704f1d" stroke-width="2" fill="url(#gearMetal)">
+      <rect x="-3" y="-26" width="6" height="8"/>
+      <rect x="-3" y="18" width="6" height="8"/>
+      <rect x="-26" y="-3" width="8" height="6"/>
+      <rect x="18" y="-3" width="8" height="6"/>
+      <rect transform="rotate(45)" x="-3" y="-26" width="6" height="8"/>
+      <rect transform="rotate(45)" x="-3" y="18" width="6" height="8"/>
+      <rect transform="rotate(135)" x="-3" y="-26" width="6" height="8"/>
+      <rect transform="rotate(135)" x="-3" y="18" width="6" height="8"/>
+    </g>
+    <circle r="6" fill="#0b1220" stroke="#b08d57" stroke-width="2"/>
+  </g>
+</svg>
 
-    <nav aria-label="Upcoming content">
-      <span>Dictionary (coming soon)</span>
-      <span>Story (coming soon)</span>
-      <span>Membership / Application (coming soon)</span>
+      <div class="wordmark">
+        <div class="name">Meme Coin</div>
+        <div class="sub">Education & project hub</div>
+      </div>
+    </a>
+    <nav class="primary" aria-label="Primary navigation">
+      <a href="#intro">Intro</a>
+      <a href="#learn">Learn</a>
+      <a href="#featured">Featured</a>
+      <a href="#faq">FAQ</a>
     </nav>
+    <a class="cta" href="dlzr_vip_application_mailto.html" class="cta vip">Apply to VIP Squad</a>
+  </div>
+</header>
 
-    <p><a class="cta" href="mailto:meme@meme-coin.no">Contact Us</a></p>
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" id="intro">
+    <div class="hero-card">
+      <div class="kicker">Meme coin · Clear explanations · Friendly UX</div>
+      <h1>Meme Coin — learn the mechanics, then have fun</h1>
+      <p class="sub">A simple, beautiful hub to understand how meme coins work: common terms, how value emerges, and how liquidity pools shape price. Explore the resources below.</p>
+      <div class="hero-actions">
+        <a class="cta" href="#learn">Start learning</a>
+        <a class="cta" href="dlzr_vip_application_mailto.html" class="cta vip">Apply to VIP Squad</a>
+      </div>
+      <div class="hero-actions" style="margin-top:8px">
+        <span class="badge">No financial advice</span>
+        <span class="badge">Education-first</span>
+        <span class="badge">Lightweight & fast</span>
+      </div>
+    </div>
+    
+    <div class="hero-visual">
+      <video controls preload="none" poster="9e4a9578-75d8-414f-a58a-6a3681710ce2.png" 
+             style="width:100%; border-radius:26px; box-shadow:var(--shadow)">
+        <source src="watermarked-b57f1fc2-fffc-4905-8565-31f0d7346b15.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
 
-    <footer>
-      © <span id="year"></span> Meme-Coin. All rights reserved.
-    </footer>
-  </main>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  </section>
+
+  <!-- LEARN -->
+  <section class="section" id="learn">
+    <h2>Learn</h2>
+    <div class="grid-3">
+      <article class="card">
+        <div class="icon">📖</div>
+        <h3>Crypto Glossary (A–Z)</h3>
+        <p class="muted">Quick definitions for the most common terms you’ll encounter in meme coins and DeFi.</p>
+        <div class="links" style="margin-top:8px">
+          <a class="link" href="crypto_meme_glossary_AZ.html">
+            Open glossary
+            <span class="right">→</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="icon">🧪</div>
+        <h3>How Value Works</h3>
+        <p class="muted">Understand the relationship between supply, market cap and price — with visual intuition.</p>
+        <div class="links" style="margin-top:8px">
+          <a class="link" href="dlzr_explainer.html">Read explainer <span class="right">→</span></a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="icon">🌊</div>
+        <h3>Liquidity Pool Explained</h3>
+        <p class="muted">See how AMMs set prices, how LP depth matters, and why slippage happens.</p>
+        <div class="links" style="margin-top:8px">
+          <a class="link" href="dlzr_liquidity_pool_explained.html">Read guide <span class="right">→</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- TESTIMONY -->
+  <section class="section" id="testimony">
+    <h2>Testimony</h2>
+    <div class="grid-2">
+      <article class="card">
+        <div class="icon">✨</div>
+        <h3>Why this matters</h3>
+        <p class="muted">Real stories and intent behind building an educational-first meme coin experience. What we value: clarity, community, and playful exploration.</p>
+        <div class="links" style="margin-top:8px">
+          <a class="link" href="testimonial_full_meme_coin.html">Read full testimony <span class="right">→</span></a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="icon">🎯</div>
+        <h3>Join the VIP Laser Squad</h3>
+        <p class="muted">Help shape community initiatives. Applications are reviewed on a rolling basis.</p>
+        <div class="links" style="margin-top:8px">
+          <a class="link" href="dlzr_vip_application_mailto.html" class="link vip">Apply now <span class="right">→</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECT -->
+  <section class="section" id="featured">
+    <h2>Featured Project</h2>
+    <div class="banner-wrap">
+      <!-- Embedded banner, self-contained; the banner content itself may include its own branding. -->
+      <iframe src="dlzr_banner_770x130.html" title="Featured project banner" loading="lazy"></iframe>
+      <div class="banner-caption">
+        <span>This banner highlights a recommended project.</span>
+        <a class="cta" href="dlzr_vip_application_mailto.html" class="cta vip">Apply to VIP Squad</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <h2>FAQ</h2>
+    <details class="faq">
+      <summary><span class="chev"></span> Is any of this financial advice?</summary>
+      <div class="answer">No. All content is for education and entertainment only. Do your own research and never invest more than you can afford to lose.</div>
+    </details>
+    <details class="faq">
+      <summary><span class="chev"></span> How do I use these resources?</summary>
+      <div class="answer">Start with the glossary to get fluent in the basics. Then read the value explainer and the liquidity pool guide. If you want to contribute, check the testimony and apply to the VIP squad.</div>
+    </details>
+    <details class="faq">
+      <summary><span class="chev"></span> Can I add other projects?</summary>
+      <div class="answer">Yes — this hub is project-agnostic. You can embed additional banners and add more links without changing the core layout.</div>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="#learn">Learn</a>
+    <a href="#testimony">Testimony</a>
+    <a href="#featured">Featured</a>
+    <a href="dlzr_vip_application_mailto.html" class="vip">Apply to VIP</a>
+  </div>
+  <div style="margin-top:6px">© <span id="year"></span> Meme Coin · This is not financial advice</div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
