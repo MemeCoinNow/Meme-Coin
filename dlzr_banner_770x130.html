@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DuckLaser X – Banner 770×130</title>
+<style>
+  /* === Banner container (fast størrelse) === */
+  .dlzr-banner{
+    width:770px; height:130px;
+    display:flex; align-items:center; gap:14px;
+    padding:10px 16px; box-sizing:border-box;
+    background:#0a0a0a; color:#d9a62c;
+    border:1px solid #2a1f0e; border-radius:8px;
+    position:relative; overflow:hidden;
+    font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+    transition: box-shadow .25s ease, transform .25s ease;
+  }
+  /* Subtil flamme-/eksplosjons-accent i toppen (kun CSS-gradients) */
+  .dlzr-banner::before{
+    content:""; position:absolute; left:-10%; right:-10%; top:-45%; height:200px;
+    background:
+      radial-gradient(120px 70px at 85% 10%, rgba(255,180,60,.45), rgba(255,120,0,.18) 60%, transparent 70%),
+      radial-gradient(220px 100px at 60% -10%, rgba(255,140,0,.35), rgba(255,90,0,.12) 60%, transparent 75%);
+    pointer-events:none; mix-blend-mode:screen; filter: saturate(120%) blur(1px);
+  }
+  /* Vignett for bedre lesbarhet på tekst */
+  .dlzr-banner::after{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(120% 120% at 110% -10%, transparent 45%, rgba(0,0,0,.55) 72%);
+    pointer-events:none;
+  }
+  /* Hover-glød */
+  .dlzr-banner:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(255,180,60,.30), inset 0 0 12px rgba(255,150,40,.15);
+  }
+
+  /* Venstre: ikon + flammeglød under */
+  .dlzr-left{ flex:0 0 120px; display:flex; align-items:center; justify-content:center; }
+  .dlzr-icon-wrap{ position:relative; width:92px; height:92px; }
+  .dlzr-icon{ width:100%; height:100%; object-fit:contain; display:block; filter: drop-shadow(0 2px 2px rgba(0,0,0,.6)); }
+  .dlzr-flames{
+    position:absolute; left:50%; bottom:-2px; transform:translateX(-50%);
+    width:120px; height:40px; border-radius:50%;
+    background:
+      radial-gradient(closest-side, rgba(255,150,40,.55), rgba(255,90,0,.25) 60%, transparent 70%),
+      radial-gradient(70px 18px at 60% 60%, rgba(255,210,100,.45), transparent 70%);
+    filter: blur(8px); opacity:.9; pointer-events:none;
+  }
+
+  /* Høyre: tekstinnhold */
+  .dlzr-right{ flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
+  .dlzr-title{ line-height:1; }
+  .dlzr-title .name{
+    font-weight:800; letter-spacing:.5px; font-size:28px; margin-right:10px;
+    color:#f0b53c; text-shadow:0 0 6px rgba(255,160,60,.25);
+  }
+  .dlzr-title .ticker{ font-weight:700; font-size:18px; color:#e3a22e; }
+
+  .dlzr-row{ display:flex; align-items:center; gap:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .label{ color:#b6862a; font-weight:700; }
+  .value{ color:#f2cf7a; }
+  .link{ color:#ffcf5a; text-decoration:none; border-bottom:1px dotted rgba(255,207,90,.35); }
+  .link:hover{ color:#ffd98a; }
+
+  .copy{
+    background:#1b1409; color:#ffd07a; border:1px solid #3a2a12; border-radius:6px;
+    padding:2px 8px; font-size:12px; cursor:pointer; user-select:none;
+  }
+  .copy:hover{ box-shadow:0 0 8px rgba(255,170,60,.3); }
+
+  .sep{ color:#6f5326; user-select:none; }
+  /* Frivillig: omslutt i midtstilt forhåndsvisning på blank side */
+  body{ background:#0b0b0b; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px; margin:0; color:#d9a62c; font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="dlzr-banner" role="banner" aria-label="DuckLaser X banner">
+  <div class="dlzr-left">
+    <div class="dlzr-icon-wrap" aria-hidden="true">
+      <!-- 🔁 BYTT TIL EGEN URL ELLER RELATIV STI -->
+      <img src="YOUR_ICON_URL.png" alt="DuckLaser X logo" class="dlzr-icon" />
+      <span class="dlzr-flames" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <div class="dlzr-right">
+    <div class="dlzr-title">
+      <span class="name">DUCKLASER X</span>
+      <span class="ticker">(DLZR)</span>
+    </div>
+
+    <div class="dlzr-row">
+      <span class="label">CA:</span>
+      <span id="dlzr-ca" class="value">32VTpGGwNacedw3cREPaCZrdZiZ1KWoMb5GwphvwGGM9</span>
+      <button class="copy" data-copy-target="#dlzr-ca" aria-label="Kopier kontraktsadresse">Kopier</button>
+    </div>
+
+    <div class="dlzr-row">
+      <span class="label">WEB:</span>
+      <a id="dlzr-web" class="value link" href="https://ducklaserx.no" target="_blank" rel="noopener">ducklaserx.no</a>
+      <button class="copy" data-copy-target="#dlzr-web" aria-label="Kopier webadresse">Kopier</button>
+      <span class="sep">•</span>
+      <a class="value link" href="https://x.com/ducklaserx" target="_blank" rel="noopener">Twitter/X: @ducklaserx</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Én-klikk kopiering med enkel fallback
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.copy');
+    if (!btn) return;
+    const target = document.querySelector(btn.dataset.copyTarget);
+    if (!target) return;
+
+    // Kopiér href hvis mål er en lenke, ellers textContent
+    const text = target.tagName === 'A'
+      ? (target.getAttribute('href') || target.textContent.trim())
+      : target.textContent.trim();
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        const old = btn.textContent; btn.textContent = 'Kopiert!';
+        setTimeout(() => btn.textContent = old, 1200);
+      }).catch(fallbackSelect);
+    } else {
+      fallbackSelect();
+    }
+
+    function fallbackSelect(){
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(target);
+      sel.removeAllRanges(); sel.addRange(range);
+      alert('Tekst markert — trykk Ctrl/Cmd+C for å kopiere.');
+    }
+  });
+</script>
+
+</body>
+</html>
