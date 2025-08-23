@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DuckLaser X — VIP Laser Squad Application (Email)</title>
+  <meta name="description" content="Apply to join the VIP Laser Squad for DuckLaser X (DLZR). Send your application via email with one click." />
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #0f1730;
+      --text: #e8ecf3;
+      --muted: #a5afc6;
+      --accent: #7bdcff;
+      --accent-2: #a7f3d0;
+      --danger: #ff7b7b;
+      --border: #2a3557;
+      --radius: 16px;
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; background:
+        radial-gradient(1200px 600px at 15% -10%, #172757 0%, var(--bg) 55%),
+        radial-gradient(900px 500px at 100% 120%, #1a2c63 0%, var(--bg) 60%),
+        var(--bg);
+      color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    header { padding: clamp(20px, 4vw, 40px) 20px 10px; text-align: center; }
+    .badge { display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px; border: 1px solid var(--border);
+      border-radius: 999px; background: rgba(255,255,255,.03); color: var(--text); font-weight: 700; letter-spacing: .3px; }
+    .spark { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+      background: conic-gradient(from 180deg at 50% 50%, #ffb703, #fb7185, #7bdcff, #a7f3d0, #ffb703); }
+    h1 { margin: 14px 0 6px; font-size: clamp(28px, 5vw, 46px); line-height: 1.1; }
+    .intro { margin: 0 auto; max-width: 900px; color: var(--muted); font-size: clamp(16px, 2vw, 18px); padding: 0 20px 16px; }
+    main { margin: 0 auto; max-width: 960px; padding: 10px 20px 60px; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(18px, 3vw, 30px); }
+    .grid { display: grid; gap: 16px; }
+    @media (min-width: 720px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"], input[type="email"], textarea {
+      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: #0e1732; color: var(--text); outline: none;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .section-title { margin: 24px 0 12px; font-size: 20px; font-weight: 800; letter-spacing: .3px; }
+    .checks { display: grid; gap: 10px; }
+    .check { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 12px;
+      background: rgba(255,255,255,.02); }
+    .check input { transform: translateY(3px); }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-top: 16px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; border-radius: 12px;
+      border: 1px solid var(--border); background: rgba(255,255,255,.04); color: var(--text); cursor: pointer;
+      transition: transform .1s ease, filter .2s ease, background .2s ease; text-decoration: none; font-weight: 700; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(180deg, rgba(123,220,255,.18), rgba(123,220,255,.06)); }
+    .btn-ghost { background: rgba(255,255,255,.02); }
+    .note { margin-top: 10px; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--border); background: rgba(255,255,255,.02);
+      color: var(--muted); font-size: 14px; }
+    .wallet { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .error { color: var(--danger); font-weight: 700; display: none; }
+    .stepper { display: grid; grid-auto-flow: column; gap: 6px; justify-content: start; margin-bottom: 12px; }
+    .step { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; background: rgba(255,255,255,.02); opacity: .7; }
+    .step.active { opacity: 1; background: rgba(123,220,255,.12); }
+    footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 24px; }
+    .hide { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge"><span class="spark">✨</span> DUCKLASER X • VIP LASER SQUAD</div>
+    <h1>Apply to the VIP Laser Squad</h1>
+    <p class="intro">
+      Welcome, future Laser Pioneer! You’re about to join the core builders behind <strong>DuckLaser X (DLZR)</strong> — a
+      community-first project where memes meet momentum. As a <em>hodler and contributor</em> you’ll help shape brand, tech,
+      and community initiatives. If you’re ready to invest, build, and grow together, start your application below.
+    </p>
+  </header>
+
+  <main>
+    <!-- STEP 1: Commitment Gate -->
+    <section id="step-1" class="card">
+      <div class="stepper">
+        <span class="step active">Step 1 • Commitment</span>
+        <span class="step">Step 2 • Profile</span>
+        <span class="step">Step 3 • Motivation</span>
+        <span class="step">Step 4 • Review & Email</span>
+      </div>
+
+      <h2 class="section-title">Commitment & Understanding (all must be YES)</h2>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="c1" /> I understand the <strong>one-time, non-refundable membership fee of 0.5 SOL</strong>.</label>
+        <label class="check"><input type="checkbox" id="c2" /> I will <strong>purchase at least 0.5 SOL worth of DLZR</strong> to join.</label>
+        <label class="check"><input type="checkbox" id="c3" /> I agree to <strong>HODL the 0.5 SOL DLZR</strong> while I am a VIP Laser Squad member.</label>
+        <label class="check"><input type="checkbox" id="c4" /> I understand I may buy and trade <strong>additional DLZR</strong> beyond the required 0.5 SOL.</label>
+        <label class="check"><input type="checkbox" id="c5" /> I accept this is a <strong>long-term commitment</strong>, not a quick-profit scheme.</label>
+        <label class="check"><input type="checkbox" id="c6" /> I will contribute <strong>time, skills, and positive energy</strong> to the project.</label>
+        <label class="check"><input type="checkbox" id="c7" /> I will <strong>respect and collaborate</strong> with fellow members.</label>
+        <label class="check"><input type="checkbox" id="c8" /> I accept that decisions may be made <strong>collectively</strong> for the project’s best interest.</label>
+        <label class="check"><input type="checkbox" id="c9" /> I agree my <strong>personal information may be shared internally</strong> with VIP Laser Squad members.</label>
+        <label class="check"><input type="checkbox" id="c10" /> I will <strong>not share VIP links or project information</strong> outside the project.</label>
+        <label class="check"><input type="checkbox" id="c11" /> I understand that upon acceptance and completed investment, I will <strong>receive private social access</strong>.</label>
+      </div>
+
+      <div class="note">
+        <strong>Payment wallet (fee 0.5 SOL):</strong>
+        <div class="wallet" aria-live="polite">
+          <span id="wallet-text">2zFVQzGWbpQBCj5RQEFDNpqQxwnsVsFeNtCR6n94q5nR</span>
+          <button class="btn btn-ghost" type="button" id="copy-wallet">Copy</button>
+        </div>
+        <div class="muted">Send the one-time, non-refundable fee of <strong>0.5 SOL</strong> to the wallet above. Keep a transaction reference.</div>
+      </div>
+
+      <div class="toolbar">
+        <span class="error" id="gate-error">Please confirm all 11 commitment items to continue.</span>
+        <button class="btn btn-primary" id="to-step-2" disabled>Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 2: Profile -->
+    <section id="step-2" class="card hide" aria-hidden="true">
+      <div class="stepper">
+        <span class="step">Step 1 • Commitment</span>
+        <span class="step active">Step 2 • Profile</span>
+        <span class="step">Step 3 • Motivation</span>
+        <span class="step">Step 4 • Review & Email</span>
+      </div>
+
+      <h2 class="section-title">Personal Information</h2>
+      <p class="muted">Accurate information is required and will be shared with other VIP Laser Squad members for internal use only.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <label for="fullName">Full Name</label>
+          <input id="fullName" type="text" required placeholder="Your full name" />
+        </div>
+        <div>
+          <label for="handle">Preferred Username / Handle</label>
+          <input id="handle" type="text" required placeholder="@yourhandle" />
+        </div>
+        <div>
+          <label for="email">Email Address</label>
+          <input id="email" type="email" required placeholder="you@example.com" />
+        </div>
+        <div>
+          <label for="im">Telegram / Discord ID</label>
+          <input id="im" type="text" required placeholder="username#1234 or @telegram" />
+        </div>
+        <div class="grid" style="grid-column: 1 / -1;">
+          <label for="wallet">Your SOL Wallet Address</label>
+          <input id="wallet" type="text" required placeholder="Your SOL wallet (Base58)" />
+          <p class="muted">This will be used to verify the membership fee and DLZR purchase.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-ghost" id="back-1">Back</button>
+        <button class="btn btn-primary" id="to-step-3">Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: Motivation & Skills -->
+    <section id="step-3" class="card hide" aria-hidden="true">
+      <div class="stepper">
+        <span class="step">Step 1 • Commitment</span>
+        <span class="step">Step 2 • Profile</span>
+        <span class="step active">Step 3 • Motivation</span>
+        <span class="step">Step 4 • Review & Email</span>
+      </div>
+
+      <h2 class="section-title">Skills & Contributions</h2>
+      <div class="grid">
+        <div>
+          <label for="skills">What skills, talents, or knowledge can you bring?</label>
+          <textarea id="skills" required placeholder="Marketing, design, coding, tokenomics, partnerships, community leadership, etc."></textarea>
+        </div>
+        <div>
+          <label for="experience">Do you have experience in crypto/Web3 or startups?</label>
+          <textarea id="experience" placeholder="Share briefly about your background (optional but encouraged)."></textarea>
+        </div>
+        <div>
+          <label for="teamwork">Have you been part of a team before?</label>
+          <textarea id="teamwork" placeholder="Describe your role and what you learned."></textarea>
+        </div>
+      </div>
+
+      <h2 class="section-title">Motivation & Vision</h2>
+      <div class="grid">
+        <div>
+          <label for="why">Why do you want to join the VIP Laser Squad?</label>
+          <textarea id="why" required></textarea>
+        </div>
+        <div>
+          <label for="plan">How will you contribute over the next 6–12 months?</label>
+          <textarea id="plan" required></textarea>
+        </div>
+        <div>
+          <label for="ideas">Do you have ideas for sub-projects or initiatives?</label>
+          <textarea id="ideas"></textarea>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-ghost" id="back-2">Back</button>
+        <button class="btn btn-primary" id="to-step-4">Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 4: Review & Email -->
+    <section id="step-4" class="card hide" aria-hidden="true">
+      <div class="stepper">
+        <span class="step">Step 1 • Commitment</span>
+        <span class="step">Step 2 • Profile</span>
+        <span class="step">Step 3 • Motivation</span>
+        <span class="step active">Step 4 • Review & Email</span>
+      </div>
+
+      <h2 class="section-title">Final Agreement</h2>
+      <div class="checks">
+        <label class="check">
+          <input type="checkbox" id="fa1" />
+          I agree to pay the <strong>0.5 SOL membership fee</strong> (non-refundable) to
+          <code>2zFVQzGWbpQBCj5RQEFDNpqQxwnsVsFeNtCR6n94q5nR</code>.
+        </label>
+        <label class="check">
+          <input type="checkbox" id="fa2" />
+          I agree to purchase at least <strong>0.5 SOL worth of DLZR</strong> and HODL those tokens while I am a member.
+        </label>
+        <label class="check">
+          <input type="checkbox" id="fa3" />
+          I accept the responsibilities of being part of the <strong>VIP Laser Squad</strong>.
+        </label>
+      </div>
+
+      <div class="toolbar">
+        <span class="error" id="submit-error">Please complete all required fields and confirmations.</span>
+        <button class="btn btn-ghost" id="back-3">Back</button>
+        <a class="btn btn-primary" id="email-btn" href="#" aria-disabled="true">Send Application via Email</a>
+      </div>
+
+      <p class="note">
+        After your application is reviewed and your investment is confirmed, you will be contacted and granted
+        access to private socials and VIP channels.
+      </p>
+    </section>
+
+    <footer>© <span id="year"></span> DuckLaser X. All rights reserved.</footer>
+  </main>
+
+  <script>
+    // Utilities
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    const show = (el) => { el.classList.remove('hide'); el.setAttribute('aria-hidden', 'false'); };
+    const hide = (el) => { el.classList.add('hide'); el.setAttribute('aria-hidden', 'true'); };
+
+    // Year
+    $("#year").textContent = new Date().getFullYear();
+
+    // Wallet copy
+    $("#copy-wallet").addEventListener("click", async () => {
+      const text = $("#wallet-text").textContent.trim();
+      try { await navigator.clipboard.writeText(text); $("#copy-wallet").textContent = "Copied"; setTimeout(()=>$("#copy-wallet").textContent="Copy", 1200);} catch (e) {}
+    });
+
+    // Step 1 gating
+    const gateChecks = ["#c1","#c2","#c3","#c4","#c5","#c6","#c7","#c8","#c9","#c10","#c11"].map($);
+    const toStep2 = $("#to-step-2");
+    const gateError = $("#gate-error");
+
+    function updateGate() {
+      const allYes = gateChecks.every(c => c.checked);
+      toStep2.disabled = !allYes;
+      gateError.style.display = allYes ? "none" : "inline-block";
+    }
+    gateChecks.forEach(c => c.addEventListener("change", updateGate));
+    updateGate();
+
+    // Step navigation
+    const step1 = $("#step-1");
+    const step2 = $("#step-2");
+    const step3 = $("#step-3");
+    const step4 = $("#step-4");
+
+    toStep2.addEventListener("click", () => { hide(step1); show(step2); window.scrollTo({top:0, behavior:"smooth"}); });
+    $("#back-1").addEventListener("click", () => { hide(step2); show(step1); window.scrollTo({top:0, behavior:"smooth"}); });
+
+    $("#to-step-3").addEventListener("click", () => {
+      if (validateProfile()) { hide(step2); show(step3); window.scrollTo({top:0, behavior:"smooth"}); }
+    });
+    $("#back-2").addEventListener("click", () => { hide(step3); show(step2); window.scrollTo({top:0, behavior:"smooth"}); });
+
+    $("#to-step-4").addEventListener("click", () => {
+      if (validateMotivation()) { hide(step3); show(step4); window.scrollTo({top:0, behavior:"smooth"}); buildEmailHref(); }
+    });
+    $("#back-3").addEventListener("click", () => { hide(step4); show(step3); window.scrollTo({top:0, behavior:"smooth"}); });
+
+    // Validation helpers
+    function nonEmpty(id){ return $(id).value.trim().length > 1; }
+    function solanaLike(addr){
+      // Basic client-side check: Base58 characters and length between 32 and 44.
+      return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr.trim());
+    }
+
+    function validateProfile(){
+      const ok = nonEmpty("#fullName") && nonEmpty("#handle") && nonEmpty("#email") && nonEmpty("#im") && solanaLike($("#wallet").value);
+      if (!ok) alert("Please complete all personal information fields and provide a valid SOL wallet address.");
+      return ok;
+    }
+
+    function validateMotivation(){
+      const ok = nonEmpty("#skills") && nonEmpty("#why") && nonEmpty("#plan");
+      if (!ok) alert("Please fill in your skills, why you want to join, and your 6–12 month plan.");
+      return ok;
+    }
+
+    // Final agreement & email build
+    const emailBtn = $("#email-btn");
+    const faChecks = ["#fa1","#fa2","#fa3"].map($);
+    const submitError = $("#submit-error");
+
+    function updateSubmitState(){
+      const faOk = faChecks.every(c => c.checked);
+      emailBtn.setAttribute("aria-disabled", String(!faOk));
+      emailBtn.classList.toggle("btn-primary", faOk);
+      submitError.style.display = faOk ? "none" : "inline-block";
+    }
+    faChecks.forEach(c => c.addEventListener("change", () => { updateSubmitState(); buildEmailHref(); }));
+    updateSubmitState();
+
+    function val(id){ return $(id).value.trim(); }
+    function yesNo(el){ return el.checked ? "YES" : "NO"; }
+
+    function buildEmailHref(){
+      if (!faChecks.every(c=>c.checked)) {
+        emailBtn.href = "#";
+        return;
+      }
+
+      const subject = `DLZR VIP Application — ${val("#fullName") || "Applicant"} — ${val("#handle") || ""}`.trim();
+      const lines = [
+        "DuckLaser X — VIP Laser Squad Application",
+        `Submitted: ${new Date().toISOString()}`,
+        "",
+        "— Commitment (must be YES) —",
+        `Fee 0.5 SOL understood: ${yesNo($("#c1"))}`,
+        `Purchase ≥0.5 SOL DLZR: ${yesNo($("#c2"))}`,
+        `HODL 0.5 SOL DLZR while VIP: ${yesNo($("#c3"))}`,
+        `May buy/trade additional DLZR: ${yesNo($("#c4"))}`,
+        `Long-term commitment: ${yesNo($("#c5"))}`,
+        `Contribute time/skills/energy: ${yesNo($("#c6"))}`,
+        `Respect & collaborate: ${yesNo($("#c7"))}`,
+        `Collective decisions accepted: ${yesNo($("#c8"))}`,
+        `Personal info can be shared internally: ${yesNo($("#c9"))}`,
+        `Will NOT share VIP links or project info outside: ${yesNo($("#c10"))}`,
+        `Private social access after acceptance & investment: ${yesNo($("#c11"))}`,
+        "",
+        "— Personal Information —",
+        `Full Name: ${val("#fullName")}`,
+        `Handle: ${val("#handle")}`,
+        `Email: ${val("#email")}`,
+        `Telegram/Discord: ${val("#im")}`,
+        `Applicant SOL Wallet: ${val("#wallet")}`,
+        "",
+        "— Skills & Contributions —",
+        `Skills: ${val("#skills")}`,
+        `Crypto/Web3/Startup Experience: ${val("#experience")}`,
+        `Teamwork Background: ${val("#teamwork")}`,
+        "",
+        "— Motivation & Vision —",
+        `Why join: ${val("#why")}`,
+        `6–12 month plan: ${val("#plan")}`,
+        `Project ideas: ${val("#ideas")}`,
+        "",
+        "— Final Agreement —",
+        `Agree fee 0.5 SOL to 2zFVQzGWbpQBCj5RQEFDNpqQxwnsVsFeNtCR6n94q5nR: ${yesNo($("#fa1"))}`,
+        `Agree buy ≥0.5 SOL DLZR & HODL while VIP: ${yesNo($("#fa2"))}`,
+        `Accept responsibilities of VIP Laser Squad: ${yesNo($("#fa3"))}`,
+      ];
+
+      const mailto = `mailto:apply@meme-coin.no?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\\n"))}`;
+      emailBtn.href = mailto;
+    }
+
+    // Build initial mailto
+    buildEmailHref();
+
+    // Email button click: final guard
+    emailBtn.addEventListener("click", (e) => {
+      if (emailBtn.getAttribute("aria-disabled") === "true") {
+        e.preventDefault();
+        submitError.style.display = "inline-block";
+      } else {
+        // best-effort validation before triggering mail client
+        if (!validateProfile() || !validateMotivation()) {
+          e.preventDefault();
+          submitError.style.display = "inline-block";
+        }
+      }
+    });
+  </script>
+</body>
+</html>
