@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Crypto & Meme Coin Glossary — Sidebar + Glider + ALL (Fit Height)</title>
+<meta name="description" content="A–Z glossary with alphabet sidebar, search, and a list that never exceeds the alphabet menu height." />
+<style>
+  :root {
+    --bg:#0f1220; --panel:#131833; --text:#e6e8ef; --muted:#aab0c0; --accent:#7bdcff; --border:#2c3356;
+    --radius:16px; --shadow:0 12px 32px rgba(0,0,0,.35);
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+  header { max-width:1200px; margin:0 auto; padding:20px; }
+  h1 { margin:0 0 12px; font-size:clamp(24px, 4vw, 40px); }
+  .searchbar input {
+    width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:#0f1732; color:var(--text);
+  }
+
+  .container {
+    max-width:1200px; margin:0 auto; padding:0 20px 24px;
+    display:grid; grid-template-columns: 260px 1fr; gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+  }
+
+  nav.sidebar {
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    padding:12px; box-shadow: var(--shadow);
+  }
+  nav.sidebar h3 { margin:0 0 10px; font-size:14px; color:var(--muted); }
+
+  .letters { display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; }
+  .letters button {
+    appearance:none; border:1px solid var(--border); background:rgba(255,255,255,.02);
+    color:var(--muted); padding:10px 0; border-radius:12px; cursor:pointer; font-weight:700;
+  }
+  .letters button:hover { background:rgba(123,220,255,.12); color:var(--text); }
+  .letters button.active { background:rgba(123,220,255,.18); color:var(--text); border-color:rgba(123,220,255,.4); }
+  .letters button.all { grid-column: 1 / -1; letter-spacing:.2em; }
+
+  .list-wrap {
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    box-shadow:var(--shadow);
+    padding:12px; overflow:auto; /* the 'glider' */
+    scroll-behavior:smooth;
+    max-height: 400px; /* will be updated via JS to match sidebar height */
+  }
+
+  /* Custom scrollbar (glider) */
+  .list-wrap::-webkit-scrollbar { width: 10px; }
+  .list-wrap::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 10px; }
+  .list-wrap::-webkit-scrollbar-thumb { background: rgba(123,220,255,.4); border-radius: 10px; }
+  .list-wrap::-webkit-scrollbar-thumb:hover { background: rgba(123,220,255,.6); }
+  .list-wrap { scrollbar-width: thin; scrollbar-color: rgba(123,220,255,.5) rgba(255,255,255,.05); }
+
+  section.letter { scroll-margin-top: 8px; margin: 8px 0 18px; }
+  section.letter h2 { margin: 6px 8px 10px; font-size: 22px; opacity:.9; }
+  dl { margin:0; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  dt { padding:12px 14px; border-top:1px solid var(--border); font-weight:800; background:rgba(255,255,255,.02); }
+  dt:first-of-type { border-top:none; }
+  dd { margin:0; padding:0 14px 12px; color:var(--muted); }
+  .empty { color:var(--muted); padding:12px; text-align:center; }
+
+  mark { background:rgba(123,220,255,.2); border-radius:4px; padding:0 2px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Crypto & Meme Coin Glossary</h1>
+    <div class="searchbar">
+      <input id="search" type="search" placeholder="Search a term… (e.g., HODL, DYOR, Rug Pull)" aria-label="Search terms" />
+    </div>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar" aria-label="A–Z sidebar">
+      <h3>A–Z</h3>
+      <div id="letters" class="letters"></div>
+    </nav>
+
+    <div class="list-wrap" id="listWrap">
+      <main id="content"></main>
+    </div>
+  </div>
+
+<script>
+const GLOSSARY_DATA = [
+  {
+    "term": "Address",
+    "def": "A public wallet address used to send and receive cryptocurrency."
+  },
+  {
+    "term": "Algorithm",
+    "def": "The rules or formulas by which blockchains validate transactions (e.g., proof-of-work algorithms)."
+  },
+  {
+    "term": "Algorithmic Stablecoin",
+    "def": "Stablecoin pegged to fiat but maintained by algorithms/smart contracts instead of direct collateral (e.g., UST)."
+  },
+  {
+    "term": "Alpha",
+    "def": "Insider knowledge or early valuable info on a project/coin."
+  },
+  {
+    "term": "Altcoin",
+    "def": "Any cryptocurrency that is not Bitcoin (ETH, DOGE, SHIB, etc.)."
+  },
+  {
+    "term": "AMM (Automated Market Maker)",
+    "def": "A DEX system that sets token prices via liquidity pools, not order books."
+  },
+  {
+    "term": "AML (Anti-Money Laundering)",
+    "def": "Regulations preventing illegal financial activity using crypto."
+  },
+  {
+    "term": "API (Application Programming Interface)",
+    "def": "Tools that let apps and exchanges interact for bots, trading, or data."
+  },
+  {
+    "term": "APR / APY",
+    "def": "Annualized return metrics for staking, lending, or farming (APR = simple interest, APY = compounding)."
+  },
+  {
+    "term": "Arbitrage",
+    "def": "Exploiting price differences for the same token on different exchanges to profit."
+  },
+  {
+    "term": "ASIC (Application-Specific Integrated Circuit)",
+    "def": "Specialized mining hardware built for efficiency."
+  },
+  {
+    "term": "ATH (All-Time High)",
+    "def": "The highest price a coin has ever reached."
+  },
+  {
+    "term": "ATL (All-Time Low)",
+    "def": "The lowest price a coin has ever reached."
+  },
+  {
+    "term": "Audit",
+    "def": "A professional security review of a smart contract to ensure trust and safety."
+  },
+  {
+    "term": "Avalanche (AVAX)",
+    "def": "A smart contract blockchain and cryptocurrency, often used to launch tokens. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Airdrop",
+    "def": "Free token distribution to wallets (marketing, rewards, governance)."
+  },
+  {
+    "term": "Ape / Ape In / Aping 🦍",
+    "def": "Buying a coin quickly without research, usually from hype or FOMO."
+  },
+  {
+    "term": "Aping Season",
+    "def": "A period when everyone recklessly buys meme coins."
+  },
+  {
+    "term": "Ape Tax",
+    "def": "Losses from impulsively aping into bad coins without research."
+  },
+  {
+    "term": "Anon / Anon Dev",
+    "def": "Short for “anonymous,” used for anonymous traders or developers."
+  },
+  {
+    "term": "Anon Rug",
+    "def": "When an anonymous dev vanishes with funds."
+  },
+  {
+    "term": "Ansem",
+    "def": "Meme personality/influencer often referenced in degen Twitter."
+  },
+  {
+    "term": "Anti-Rug",
+    "def": "A meme coin feature claiming to protect investors from rug pulls (scams)."
+  },
+  {
+    "term": "Anatoly (Yakovenko)",
+    "def": "Solana’s founder, memed as “Anatoly the Builder.”"
+  },
+  {
+    "term": "ADA Army",
+    "def": "Community slang for Cardano supporters."
+  },
+  {
+    "term": "Aurora / Arbitrum",
+    "def": "Layer-2 scaling solutions, sometimes memed as “hidden gems.”"
+  },
+  {
+    "term": "Atomic Swap",
+    "def": "Peer-to-peer swap of tokens across chains without intermediaries."
+  },
+  {
+    "term": "Audit Flex",
+    "def": "Community hype around a project bragging about passing a contract audit."
+  },
+  {
+    "term": "Awooo 🐺",
+    "def": "Meme war-cry from the Shiba Inu (SHIB) community."
+  },
+  {
+    "term": "Bear / Bearish Negativt markedssyn",
+    "def": "troen på at prisen skal falle. Eksempel: \"I'm bearish on that coin.\" 📘 Bear Market Et marked i nedgang over lengre tid, preget av lav tillit og fallende priser. 📘 Blockchain Den desentraliserte hovedboken hvor alle transaksjoner blir lagret og validert. 📘 Block En \"side\" i blockchainen som inneholder en liste med transaksjoner. 📘 Block Reward Belønning til minere eller validatorer for å legge til et nytt block i blockchainen. 📘"
+  },
+  {
+    "term": "BNB",
+    "def": "Binance Coin Tokenet til Binance-plattformen, ofte brukt til handel, fees, og noen ganger meme coin-launches på Binance Smart Chain (BSC). 📘"
+  },
+  {
+    "term": "BSC",
+    "def": "Binance Smart Chain En populær blockchain for lansering av meme coins og shitcoins grunnet lave avgifter og rask behandlingstid. 📘 Bridge Et verktøy for å overføre tokens fra én blockchain til en annen (f.eks. fra Ethereum til BSC). 📘"
+  },
+  {
+    "term": "Bull / Bullish Positivt markedssyn",
+    "def": "troen på at prisen skal stige. 📘 Bull Market Et marked i vekst med optimisme, økende priser og FOMO. 📘 Burn / Token Burn Prosessen der tokens blir permanent fjernet fra sirkulasjon, ofte for å gjøre en coin mer sjelden og dermed øke verdien. Eksempel: \"They burned 50% of the supply!\" 📘 Buy the Dip Å kjøpe når prisen har falt, med håp om gevinst når prisen stiger igjen. 📘 Bot Automatisert program som handler krypto eller spammer sosiale medier for å pumpe coins. 📘 Bitconnect (😂) Et notorisk krypto-ponzi-scheme, ofte brukt som meme eller advarsel. Eksempel: \"Is this another Bitconnect?\" 📘 Bitcoin (BTC) Den første og mest kjente kryptovalutaen. Mange meme coins prøver å “flippe” eller parodiere BTC. General Crypto / Blockchain Terms"
+  },
+  {
+    "term": "Bag / Bags",
+    "def": "Slang for a trader’s holdings in a specific coin (e.g., “I’m holding big SHIB bags”)."
+  },
+  {
+    "term": "Bagholder",
+    "def": "Someone stuck holding a coin that has dumped in price, often with little hope of recovery. Bear Market 🐻 – Extended period of declining prices in crypto."
+  },
+  {
+    "term": "Bear Trap",
+    "def": "False signal that a market is falling, tricking traders into shorting before a reversal."
+  },
+  {
+    "term": "Beta",
+    "def": "Early stage release of a crypto platform or DApp."
+  },
+  {
+    "term": "Bitcoin (BTC)",
+    "def": "The first and most well-known cryptocurrency, launched in 2009 by Satoshi Nakamoto."
+  },
+  {
+    "term": "Bitcoin Maximalist / Maxi",
+    "def": "Believer that Bitcoin is the only true crypto worth holding."
+  },
+  {
+    "term": "Block",
+    "def": "A “package” of transactions added to the blockchain."
+  },
+  {
+    "term": "Block Explorer",
+    "def": "A tool to view transactions, addresses, and blocks (e.g., Etherscan)."
+  },
+  {
+    "term": "Block Height",
+    "def": "The number of blocks that have been added to a blockchain."
+  },
+  {
+    "term": "Block Reward",
+    "def": "Crypto given to miners/validators for confirming blocks."
+  },
+  {
+    "term": "Blockchain",
+    "def": "A decentralized, immutable ledger that records transactions across a network. Bridge 🌉 – A protocol that allows assets to move between blockchains (ETH ⇄ BSC, etc.). Burn / Burning 🔥 – The act of permanently removing tokens from circulation, often to reduce supply."
+  },
+  {
+    "term": "Byzantine Fault Tolerance (BFT)",
+    "def": "A property of blockchain consensus ensuring the network can reach agreement even if some participants are malicious. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "BTFD (Buy The F*ing Dip)**",
+    "def": "Meme slang urging people to buy when prices fall. Bull Market 🐂 – Extended period of rising prices and positive sentiment."
+  },
+  {
+    "term": "Bull Trap",
+    "def": "False rally that lures in buyers before the price dumps again."
+  },
+  {
+    "term": "Binance Smart Chain (BSC)",
+    "def": "Popular blockchain for meme coins, often memed as the “casino chain.”"
+  },
+  {
+    "term": "Binance FUD",
+    "def": "Meme phrase about fears surrounding Binance (regulation, solvency, etc.)."
+  },
+  {
+    "term": "Bored Ape Yacht Club (BAYC) 🦍",
+    "def": "One of the most famous NFT collections, memed heavily in crypto culture. Bobo the Bear 🐻 – Meme character symbolizing perma-bears who always expect markets to crash. Banana Token 🍌 – Generic meme for random low-effort meme coins."
+  },
+  {
+    "term": "Bart Pattern",
+    "def": "Meme chart shape where price spikes up, goes sideways, then dumps — looks like Bart Simpson’s head."
+  },
+  {
+    "term": "Based",
+    "def": "Crypto slang for something admirable, bullish, or meme-worthy."
+  },
+  {
+    "term": "Bonding Curve",
+    "def": "A tokenomics meme often used in pump-and-dump schemes. Bags Packed 🎒 – Meme phrase when someone’s ready for a pump and is holding strong."
+  },
+  {
+    "term": "Chain Short for \"blockchain\"",
+    "def": "a decentralized digital ledger that records transactions. 📘"
+  },
+  {
+    "term": "CMC",
+    "def": "CoinMarketCap A popular website that tracks coin prices, market caps, volume, and more. Often used to check rankings of meme coins. 📘"
+  },
+  {
+    "term": "CEX",
+    "def": "Centralized Exchange An exchange operated by a company (like Binance, Coinbase). Opposite of DEX (decentralized exchange). 📘 Contract / Smart Contract Self-executing code on a blockchain. Meme coins usually live in smart contracts (like on Ethereum or BSC). 📘 Coin A native cryptocurrency built on its own blockchain (e.g., Bitcoin, Ethereum). Different from a \"token\" that runs on another chain. 📘 Cold Wallet A cryptocurrency wallet not connected to the internet. Considered very secure (e.g., Ledger, Trezor). 📘"
+  },
+  {
+    "term": "Correction A temporary drop in price after a big upward move",
+    "def": "often seen after meme coin pumps. 📘 Crashing When the price of a coin or the whole market falls dramatically. Example: “That meme coin is crashing hard.” 📘 Crypto Twitter (CT) The Twitter/X community focused on crypto talk, memes, alpha sharing, and hype. 📘"
+  },
+  {
+    "term": "Crowdsale A token sale to the public",
+    "def": "meme coins sometimes use this instead of presales or stealth launches. 📘"
+  },
+  {
+    "term": "Community-Driven Many meme coins market themselves as “community-driven”",
+    "def": "no central team, all decisions by holders. 📘 Copy Trading A method where you automatically copy trades from another trader. Sometimes used in meme coin hype cycles. 📘 Chainlink (LINK) A decentralized oracle network. Not a meme coin, but often partnered with oracles in meme ecosystems. 📘"
+  },
+  {
+    "term": "Centralized When control is held by a single party or small group",
+    "def": "opposite of decentralized. 📘 Cliff Vesting A delay before tokens are unlocked. Often used in team token allocations (rare in true meme coins). 📘 CoinGecko Another popular site (like CoinMarketCap) for tracking crypto prices and stats. 📘 Confirmed Rug Slang for when a meme coin project has been exposed as a scam and rugged its investors. 📘 Crypto Bro Slang for stereotypical hype-driven, risk-loving crypto trader. 📘"
+  },
+  {
+    "term": "Capped Supply A coin with a maximum number of tokens that can ever exist",
+    "def": "meme coins often use this for scarcity appeal. General Crypto / Blockchain Terms"
+  },
+  {
+    "term": "CeFi (Centralized Finance)",
+    "def": "Traditional crypto services run by centralized exchanges (Binance, Coinbase, etc.)."
+  },
+  {
+    "term": "CEX (Centralized Exchange)",
+    "def": "A custodial exchange that holds user funds and manages trades on their servers."
+  },
+  {
+    "term": "Chain",
+    "def": "Short for “blockchain,” the underlying network ledger."
+  },
+  {
+    "term": "Chain Split",
+    "def": "When a blockchain diverges due to disagreements in rules (hard forks)."
+  },
+  {
+    "term": "Cold Wallet",
+    "def": "A crypto wallet kept offline (like hardware wallets) for maximum security."
+  },
+  {
+    "term": "Collateral",
+    "def": "Assets locked up in DeFi to borrow other tokens or mint stablecoins."
+  },
+  {
+    "term": "Consensus Mechanism",
+    "def": "The algorithm a blockchain uses to validate transactions (e.g., Proof of Work, Proof of Stake)."
+  },
+  {
+    "term": "Circulating Supply",
+    "def": "The amount of a coin currently in public circulation."
+  },
+  {
+    "term": "Cross-Chain",
+    "def": "Technology that allows tokens or data to move between different blockchains."
+  },
+  {
+    "term": "Custodial Wallet",
+    "def": "Wallet controlled by a third party (like an exchange), not by the user’s private keys. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Coiners / Crypto Twitter (CT)",
+    "def": "Nickname for crypto traders, especially on Twitter (now X)."
+  },
+  {
+    "term": "Community Token",
+    "def": "Meme/utility coins driven primarily by community hype and social media."
+  },
+  {
+    "term": "Chad",
+    "def": "Meme archetype for a bold, confident trader who wins big (opposite of a “soyboy” or weak hands). Clown Market 🤡 – Meme describing chaotic crypto trading conditions."
+  },
+  {
+    "term": "Copypasta Coin",
+    "def": "A token made by copying the code of another meme coin with minimal changes."
+  },
+  {
+    "term": "Cult Token / Cult Coin",
+    "def": "A meme coin with a fanatical following, often built more on belief than fundamentals."
+  },
+  {
+    "term": "Catoshi Nakamoto",
+    "def": "Meme nickname given to the “Shiba Inu” founder (play on Bitcoin’s Satoshi). CryptoKitties 🐱 – Early NFT meme/game on Ethereum that popularized collectibles."
+  },
+  {
+    "term": "Crash",
+    "def": "Meme for when prices drop suddenly — often posted with “Candle go red 🔴.” Crab Market 🦀 – Slang for when prices move sideways with little volatility."
+  },
+  {
+    "term": "DAO (Decentralized Autonomous Organization)",
+    "def": "A blockchain-based organization governed by smart contracts and token holders, without centralized leadership."
+  },
+  {
+    "term": "DApp (Decentralized Application)",
+    "def": "Apps built on blockchain networks that operate without a central authority."
+  },
+  {
+    "term": "DCA (Dollar-Cost Averaging)",
+    "def": "Investment strategy where you buy a fixed dollar amount of an asset at regular intervals, regardless of price."
+  },
+  {
+    "term": "DeFi (Decentralized Finance)",
+    "def": "Financial services (like lending, borrowing, staking) built on blockchain without banks."
+  },
+  {
+    "term": "DEX (Decentralized Exchange)",
+    "def": "A peer-to-peer exchange platform (like Uniswap or PancakeSwap) where users trade directly without intermediaries."
+  },
+  {
+    "term": "Difficulty",
+    "def": "In mining, the measure of how hard it is to find the next block. Adjusts based on network activity."
+  },
+  {
+    "term": "Distributed Ledger",
+    "def": "A database that is shared and synchronized across multiple sites, institutions, or geographies."
+  },
+  {
+    "term": "Dust",
+    "def": "Tiny amounts of crypto left in a wallet or from transactions, often too small to trade."
+  },
+  {
+    "term": "Dusting Attack",
+    "def": "A malicious technique where attackers send tiny amounts of crypto to wallets to try and deanonymize the owner. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Degen (Degenerate)",
+    "def": "A term for high-risk traders or gamblers in crypto/meme coins who ape into projects without much research."
+  },
+  {
+    "term": "Diamond Hands 💎🙌",
+    "def": "Holding onto coins no matter what, through extreme volatility, with unwavering conviction."
+  },
+  {
+    "term": "Dogecoin (DOGE) 🐕",
+    "def": "The OG meme coin, created as a joke in 2013 but became a cultural phenomenon."
+  },
+  {
+    "term": "Doge Army / DogeFam",
+    "def": "Community of Dogecoin supporters."
+  },
+  {
+    "term": "DogeFather",
+    "def": "Nickname given to Elon Musk for his Dogecoin support."
+  },
+  {
+    "term": "Doge Day",
+    "def": "A community-driven day celebrating Dogecoin (April 20th, 4/20)."
+  },
+  {
+    "term": "Do Kwon",
+    "def": "Controversial figure, co-founder of Terraform Labs (behind Terra/LUNA collapse). Often memed in crypto circles."
+  },
+  {
+    "term": "Dump",
+    "def": "Large-scale selling of a coin, usually causing its price to crash."
+  },
+  {
+    "term": "Dump It",
+    "def": "Meme slang urging mass sell-offs (often ironic)."
+  },
+  {
+    "term": "Doomposting",
+    "def": "Pessimistic posting on crypto Twitter/Reddit about markets crashing."
+  },
+  {
+    "term": "ERC-20",
+    "def": "The most common token standard on Ethereum for fungible tokens (used by most altcoins)."
+  },
+  {
+    "term": "ERC-721",
+    "def": "Standard for NFTs (non-fungible tokens) on Ethereum."
+  },
+  {
+    "term": "ERC-1155",
+    "def": "A more flexible token standard allowing both fungible and non-fungible tokens in a single contract."
+  },
+  {
+    "term": "EVM (Ethereum Virtual Machine)",
+    "def": "The computation engine that executes smart contracts on Ethereum and compatible blockchains."
+  },
+  {
+    "term": "Epoch",
+    "def": "A fixed period of time in blockchain consensus (used in staking, mining, and reward distribution)."
+  },
+  {
+    "term": "Exchange",
+    "def": "Platforms where crypto assets are bought, sold, or traded (CEX = Centralized Exchange, DEX = Decentralized Exchange)."
+  },
+  {
+    "term": "Emission Rate",
+    "def": "The rate at which new tokens are created/released into circulation."
+  },
+  {
+    "term": "Encryption",
+    "def": "The method of securing communication/data on blockchain through cryptography. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Elon (Musk) 🚀🐕",
+    "def": "The “DogeFather,” often memed for pumping Dogecoin, Shiba Inu, and other meme coins with his tweets."
+  },
+  {
+    "term": "Elon Coin / Dogelon Mars (ELON)",
+    "def": "A meme token themed after Elon Musk and space travel."
+  },
+  {
+    "term": "Exit Liquidity",
+    "def": "When new buyers unknowingly buy the top of a pump, providing sellers an exit from their positions."
+  },
+  {
+    "term": "Exit Scam",
+    "def": "When a project’s founders vanish after raising funds, leaving investors with worthless tokens."
+  },
+  {
+    "term": "Euphoria",
+    "def": "A market phase when hype, greed, and FOMO are at their peak before a crash."
+  },
+  {
+    "term": "Eat The Dip",
+    "def": "Meme phrase encouraging people to buy during market dips."
+  },
+  {
+    "term": "Faucet",
+    "def": "A site or app that gives out small amounts of free crypto (often for learning or testing)."
+  },
+  {
+    "term": "Fiat",
+    "def": "Government-issued currency (USD, EUR, etc.) not backed by a commodity like gold."
+  },
+  {
+    "term": "Fiat On-Ramp / Off-Ramp",
+    "def": "Services that let users convert fiat into crypto (on-ramp) or crypto back into fiat (off-ramp)."
+  },
+  {
+    "term": "Finality",
+    "def": "The point at which a blockchain transaction is irreversible and confirmed."
+  },
+  {
+    "term": "Flash Loan",
+    "def": "Uncollateralized loan in DeFi that must be borrowed and repaid within a single transaction block."
+  },
+  {
+    "term": "Fork",
+    "def": "A change in a blockchain’s rules; can be a hard fork (permanent split, e.g., Ethereum / Ethereum Classic) or soft fork (backward-compatible update)."
+  },
+  {
+    "term": "Full Node",
+    "def": "A computer that fully validates blockchain transactions and stores the entire ledger."
+  },
+  {
+    "term": "FOMO (Fear of Missing Out)",
+    "def": "Emotional response when traders ape into a coin because they don’t want to miss gains."
+  },
+  {
+    "term": "FUD (Fear, Uncertainty, Doubt)",
+    "def": "Negative news or rumors used to spread fear in markets and drive prices down."
+  },
+  {
+    "term": "Funding Rate",
+    "def": "Fee exchanged between long and short traders in perpetual futures markets to keep contract price aligned with spot price. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Fren 🐸",
+    "def": "Meme slang for “friend,” heavily used in Frog/Trollcoin and Pepe communities."
+  },
+  {
+    "term": "Frog Nation",
+    "def": "Community around frog-themed tokens (like Spell, Popsicle, Wonderland), memeing resilience."
+  },
+  {
+    "term": "Floki Inu (FLOKI)",
+    "def": "A meme coin named after Elon Musk’s Shiba Inu dog, part of the “dog token” wave."
+  },
+  {
+    "term": "Floor Price",
+    "def": "Lowest price an NFT or meme coin in a collection is being sold for."
+  },
+  {
+    "term": "Flippening",
+    "def": "Hypothetical moment when Ethereum (or another altcoin) overtakes Bitcoin in market cap."
+  },
+  {
+    "term": "Flipping",
+    "def": "Buying tokens or NFTs cheap and selling them quickly for profit."
+  },
+  {
+    "term": "Fish",
+    "def": "Small investors (bigger than plankton but not yet whales)."
+  },
+  {
+    "term": "Frenzy",
+    "def": "A meme for when hype makes everyone ape into coins at once. “Full"
+  },
+  {
+    "term": "Send” 🚀",
+    "def": "Meme slang for going all in on a coin without hesitation."
+  },
+  {
+    "term": "Gas",
+    "def": "The fee paid to process transactions or run smart contracts (most known on Ethereum)."
+  },
+  {
+    "term": "Gas War",
+    "def": "When many users bid higher gas fees to get their transactions processed first (common in NFT mints)."
+  },
+  {
+    "term": "Genesis Block",
+    "def": "The very first block of a blockchain."
+  },
+  {
+    "term": "GM (Good Morning)",
+    "def": "Crypto Twitter / meme culture greeting used to spread positivity."
+  },
+  {
+    "term": "GN (Good Night)",
+    "def": "The counterpart to GM, used by the community."
+  },
+  {
+    "term": "Gwei",
+    "def": "A denomination of ETH used to measure gas prices (1 ETH = 1 billion Gwei)."
+  },
+  {
+    "term": "Governance Token",
+    "def": "A token that gives holders voting rights over a protocol’s decisions (e.g., UNI for Uniswap)."
+  },
+  {
+    "term": "Gains",
+    "def": "Profits made from trading or holding crypto."
+  },
+  {
+    "term": "GPU Mining",
+    "def": "Using graphics cards to mine cryptocurrencies (was big for ETH before the merge). 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Giga Chad",
+    "def": "Meme archetype for ultimate alpha investor/trader who makes all the right plays."
+  },
+  {
+    "term": "Giga Brain / Galaxy Brain 🧠🌌",
+    "def": "A trader or degen who sees plays others don’t (often used ironically)."
+  },
+  {
+    "term": "GMI (“Gonna Make It”)",
+    "def": "Meme slang for optimism that someone/coin is destined for success. Opposite of NGMI. Goldfish Hands 🐟🙌 – Mocking term for selling too early (opposite of Diamond Hands)."
+  },
+  {
+    "term": "Green Candle 📈",
+    "def": "Slang for price going up (bullish)."
+  },
+  {
+    "term": "Gensler",
+    "def": "Refers to Gary Gensler, SEC chair, often memed as a crypto villain."
+  },
+  {
+    "term": "Grail",
+    "def": "A rare, highly sought-after NFT or meme token."
+  },
+  {
+    "term": "Get Rekt Games",
+    "def": "A degen meme phrase referring to losing everything on bad plays."
+  },
+  {
+    "term": "Halving (or “Halvening”)",
+    "def": "The programmed event (every 210,000 blocks in Bitcoin) where mining rewards are cut in half, reducing new supply."
+  },
+  {
+    "term": "Hard Cap",
+    "def": "The maximum amount of funds a project will accept in an ICO/IDO."
+  },
+  {
+    "term": "Hard Fork",
+    "def": "A non-backward-compatible change to a blockchain that creates a new chain (e.g., Bitcoin / Bitcoin Cash)."
+  },
+  {
+    "term": "Hash / Hash Rate",
+    "def": "Cryptographic function securing transactions. Hash rate = total computing power securing a network."
+  },
+  {
+    "term": "HD Wallet (Hierarchical Deterministic Wallet)",
+    "def": "A wallet that generates keys from a single seed phrase."
+  },
+  {
+    "term": "HODL",
+    "def": "Originally a misspelling of “hold,” now a crypto mantra for holding through volatility."
+  },
+  {
+    "term": "Hot Wallet",
+    "def": "A crypto wallet connected to the internet (e.g., exchange wallets,"
+  },
+  {
+    "term": "MetaMask)",
+    "def": "convenient but less secure."
+  },
+  {
+    "term": "Hybrid Exchange",
+    "def": "An exchange model combining features of centralized and decentralized platforms."
+  },
+  {
+    "term": "Hyperinflationary Token",
+    "def": "Token with no supply cap, designed to mint endlessly (usually risky). 🔹 Meme Coins & Community Slang Hopium 💨 – Blind optimism about a coin/moonshot despite bearish signs. Honey Pot 🍯 – A scam token that can be bought but not sold, trapping investors."
+  },
+  {
+    "term": "HFSP (Have Fun Staying Poor)",
+    "def": "Sarcastic meme used when someone dismisses crypto and “misses out.” Horse Coins 🐎 – Joke coins themed after horses, spun off from dog/meme coin culture. High Roller 🎲 – Meme for a degen betting huge amounts on meme coins."
+  },
+  {
+    "term": "History Repeaters",
+    "def": "Meme for people who ape into the same type of scam or rug pull over and over."
+  },
+  {
+    "term": "Head & Shoulders",
+    "def": "A chart pattern often memed to signal a potential market dump."
+  },
+  {
+    "term": "Hype Cycle",
+    "def": "Meme for the pattern of over-excitement → crash → slow recovery, common in meme coin launches."
+  },
+  {
+    "term": "ICO (Initial Coin Offering)",
+    "def": "Early fundraising method for crypto projects by selling tokens before launch."
+  },
+  {
+    "term": "IEO (Initial Exchange Offering)",
+    "def": "Similar to an ICO but conducted through a centralized exchange."
+  },
+  {
+    "term": "IDO (Initial DEX Offering)",
+    "def": "Token sale via a decentralized exchange launchpad."
+  },
+  {
+    "term": "IMF (Impossible Finance / International Monetary Fund)",
+    "def": "Sometimes referenced in DeFi/meme slang when talking about regulation or bailout jokes."
+  },
+  {
+    "term": "Impermanent Loss",
+    "def": "Loss of value that liquidity providers face when token prices change compared to just holding them."
+  },
+  {
+    "term": "Index Token",
+    "def": "A token representing a basket of assets (like DeFi Pulse Index)."
+  },
+  {
+    "term": "Inflationary Token",
+    "def": "A crypto with no fixed cap, continuously adding new supply (opposite of deflationary)."
+  },
+  {
+    "term": "Interoperability",
+    "def": "Ability for different blockchains to communicate and transfer value/data."
+  },
+  {
+    "term": "IPFS (InterPlanetary File System)",
+    "def": "A decentralized storage network often used for NFTs."
+  },
+  {
+    "term": "IRL (In Real Life)",
+    "def": "Slang used in crypto communities to separate online/meme activity from real-world events. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Insider",
+    "def": "Someone with early access to information on a meme coin launch."
+  },
+  {
+    "term": "Influencer Pump",
+    "def": "Meme phrase for when a crypto influencer promotes a meme coin, causing a short-term price surge."
+  },
+  {
+    "term": "IYKYK (“If You Know, You Know”)",
+    "def": "Meme slang for insider jokes or alpha drops in crypto Twitter/Telegram groups."
+  },
+  {
+    "term": "Instant Rug",
+    "def": "A scam where a meme coin collapses almost immediately after launch. Icarus Token 🕊️🔥 – Meme reference for projects that fly too high (pump fast) before crashing hard. I’ll"
+  },
+  {
+    "term": "Just Buy More",
+    "def": "Meme coping strategy when a coin keeps dipping."
+  },
+  {
+    "term": "Illiquid Coin",
+    "def": "A low-liquidity meme coin that’s almost impossible to sell without crashing the price. Island Pattern 🏝️ – A chart meme for when a coin pumps/dumps sharply and then trades isolated at a new range."
+  },
+  {
+    "term": "Jager",
+    "def": "The smallest unit of"
+  },
+  {
+    "term": "BNB (like “satoshi” for Bitcoin). JOMO (Joy of Missing Out)",
+    "def": "Opposite of FOMO; feeling happy for not aping into a coin that later dumped."
+  },
+  {
+    "term": "Junk Coin",
+    "def": "A low-effort or worthless token with no utility or future (common in meme coin waves)."
+  },
+  {
+    "term": "JIT (Just-In-Time Liquidity)",
+    "def": "A technique in DeFi where liquidity is added right before a trade and pulled immediately after."
+  },
+  {
+    "term": "Jurisdiction Risk",
+    "def": "The regulatory uncertainty based on laws in different countries affecting exchanges and tokens. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Jeet",
+    "def": "Slang for someone who panic-sells early at the first dip (opposite of diamond hands)."
+  },
+  {
+    "term": "Jeetcoin",
+    "def": "A satirical/meme token poking fun at paper-handed traders."
+  },
+  {
+    "term": "Jelly Beans / Jelly Coin",
+    "def": "Random meme coin themes (food-based tokens often pop up in meme waves)."
+  },
+  {
+    "term": "Jiggly Wiggly Chart 📉📈",
+    "def": "Meme term for volatile sideways movement on meme coins. Jackpot Token 🎰 – Meme coin gimmick where holders enter lottery-style prize pools."
+  },
+  {
+    "term": "Jimmy",
+    "def": "Meme archetype for the “average retail investor” who always buys tops and sells bottoms."
+  },
+  {
+    "term": "Join the Pump",
+    "def": "Meme call to action in Telegram groups hyping a coin."
+  },
+  {
+    "term": "KYC (Know Your Customer)",
+    "def": "Verification process exchanges/projects use to confirm user identity (name, ID, proof of address, etc.)."
+  },
+  {
+    "term": "Keeper / Keepers",
+    "def": "Actors in DeFi protocols that perform necessary automated functions (e.g., liquidations, rebalancing)."
+  },
+  {
+    "term": "Keypair",
+    "def": "Combination of a public key (address) and private key (secret) that controls a crypto wallet."
+  },
+  {
+    "term": "Keystore File",
+    "def": "Encrypted file storing wallet private keys (used in MetaMask and other wallets)."
+  },
+  {
+    "term": "Kilobyte (KB) Fee Limit",
+    "def": "On some older blockchains, transaction fees scale with data size in kilobytes."
+  },
+  {
+    "term": "KuCoin",
+    "def": "A well-known centralized exchange popular for listing meme coins and low-cap altcoins. 🔹 Meme Coins & Community Slang Kek 😂🐸 – Internet/meme slang (like “lol”), widely used in Pepe/frog crypto culture."
+  },
+  {
+    "term": "KEK Token",
+    "def": "A meme coin themed around the ancient frog-god meme “Kek,” tied to Pepe culture."
+  },
+  {
+    "term": "Kekistan",
+    "def": "Meme nation/community tied to Pepe and “Kek” memes, sometimes bleeding into meme coin lore."
+  },
+  {
+    "term": "Kill Switch",
+    "def": "Meme for a rug pull mechanism hidden in a scam coin’s code."
+  },
+  {
+    "term": "Kamikaze Trade",
+    "def": "Degen slang for an all-in reckless bet on a meme coin."
+  },
+  {
+    "term": "King of Memes 👑",
+    "def": "Nickname often applied to Dogecoin or Pepe depending on community context."
+  },
+  {
+    "term": "Kong Token 🦍",
+    "def": "Gorilla-themed meme coins riding off Doge/Pepe hype."
+  },
+  {
+    "term": "Karen Coin",
+    "def": "Joke coin names mocking “Karens,” playing into meme culture. Krill Investor 🦐 – Meme slang for a very small holder (below shrimp/fish tier)."
+  },
+  {
+    "term": "Layer 1 (L1)",
+    "def": "A base blockchain like Bitcoin, Ethereum, or Solana."
+  },
+  {
+    "term": "Layer 2 (L2)",
+    "def": "Scaling solutions built on top of L1 (e.g., Arbitrum, Optimism, Polygon)."
+  },
+  {
+    "term": "Ledger",
+    "def": "A record of transactions; also the popular hardware wallet brand."
+  },
+  {
+    "term": "Liquidity",
+    "def": "How easily an asset can be bought/sold without impacting price."
+  },
+  {
+    "term": "Liquidity Pool (LP)",
+    "def": "A pool of tokens locked in a smart contract that facilitates trading on DEXs."
+  },
+  {
+    "term": "Liquidity Mining",
+    "def": "Earning rewards by providing liquidity to a protocol."
+  },
+  {
+    "term": "Limit Order",
+    "def": "An exchange order to buy/sell a token at a specific price."
+  },
+  {
+    "term": "Leverage",
+    "def": "Borrowed funds used to amplify trading positions (high-risk)."
+  },
+  {
+    "term": "Lightning Network",
+    "def": "A Layer 2 payment protocol for Bitcoin enabling fast, cheap transactions."
+  },
+  {
+    "term": "Liveness",
+    "def": "In blockchain, refers to the guarantee that transactions will eventually be processed. 🔹 Meme Coins & Community Slang Lambo (When Lambo?) 🚗 – Meme phrase asking when a coin will pump enough to buy a Lamborghini. LFG (Let’s"
+  },
+  {
+    "term": "F*ing Go)** 🚀",
+    "def": "Hype meme for bullish excitement."
+  },
+  {
+    "term": "Low Cap Gem 💎",
+    "def": "Meme slang for tiny market-cap coins with “moon” potential."
+  },
+  {
+    "term": "Liquidity Rug",
+    "def": "Scam where devs pull liquidity from a pool, making the coin unsellable. Lunatic / LUNA Army 🌙 – Nickname for Terra (LUNA) supporters (before and after its crash)."
+  },
+  {
+    "term": "LARP (Live Action Role Play)",
+    "def": "Used to mock people pretending to have insider info or alpha."
+  },
+  {
+    "term": "Loser Coin (LOWB)",
+    "def": "A real meme coin created by two self-proclaimed losers in China, embraced as degen culture."
+  },
+  {
+    "term": "Legendary Bags",
+    "def": "Meme term for OG holders of Bitcoin, Dogecoin, or early meme coins."
+  },
+  {
+    "term": "Liquidation Wick",
+    "def": "Meme chart candle that liquidates over-leveraged traders before bouncing."
+  },
+  {
+    "term": "Left Curve vs. Right Curve 🧠",
+    "def": "Meme about “left-curve geniuses” aping recklessly and winning vs. “overthinking mid-curve” losing."
+  },
+  {
+    "term": "Mainnet",
+    "def": "The live blockchain network (opposite of testnet)."
+  },
+  {
+    "term": "Maker / Taker",
+    "def": "Roles in trading; makers provide liquidity with limit orders, takers consume it with market orders."
+  },
+  {
+    "term": "Margin Trading",
+    "def": "Trading using borrowed funds to increase exposure (high risk)."
+  },
+  {
+    "term": "Market Cap (MC)",
+    "def": "The value of a crypto = price × circulating supply."
+  },
+  {
+    "term": "Market Order",
+    "def": "An instant buy/sell order at the best available price."
+  },
+  {
+    "term": "Max Supply",
+    "def": "The maximum number of coins that can ever exist."
+  },
+  {
+    "term": "MEV (Maximal Extractable Value)",
+    "def": "Extra profit miners/validators capture by reordering transactions in a block."
+  },
+  {
+    "term": "Merkle Tree",
+    "def": "A data structure used to verify blockchain transactions efficiently."
+  },
+  {
+    "term": "Metamask",
+    "def": "A popular Ethereum wallet/browser extension."
+  },
+  {
+    "term": "Minting",
+    "def": "The creation of new tokens or NFTs."
+  },
+  {
+    "term": "Mining",
+    "def": "The process of validating transactions and securing proof-of-work blockchains."
+  },
+  {
+    "term": "Multi-Sig Wallet",
+    "def": "A wallet requiring multiple signatures to approve transactions. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Meme Coin",
+    "def": "A cryptocurrency created primarily for humor/community culture (DOGE, SHIB, PEPE)."
+  },
+  {
+    "term": "Moon / Mooning 🌕",
+    "def": "When a coin’s price skyrockets."
+  },
+  {
+    "term": "Moonbag",
+    "def": "A stash of tokens saved in case they “moon.”"
+  },
+  {
+    "term": "Moonboy 🚀",
+    "def": "Meme trader who always believes prices are going to the moon. McDonald’s Meme 🍔🍟 – Community joke about working at McDonald’s when portfolios crash."
+  },
+  {
+    "term": "Mega Pump 📈",
+    "def": "Meme for a huge price rally. Market Maker Bot 🤖 – Meme for bots that make fake volume/liquidity in meme coins. Milady 👒 – NFT/meme culture symbol with strong overlap into degen crypto Twitter."
+  },
+  {
+    "term": "Migration Rug",
+    "def": "Scam where devs ask holders to “migrate” to a new token but trap liquidity. Memecoin Season 🌊 – Period when low-cap meme tokens dominate hype."
+  },
+  {
+    "term": "Magic Internet Money (MIM)",
+    "def": "A real stablecoin (from Abracadabra), often memed as the ultimate degen coin."
+  },
+  {
+    "term": "Mev Bot Rekt",
+    "def": "Meme for when MEV bots lose huge amounts in failed attacks."
+  },
+  {
+    "term": "NFT (Non-Fungible Token)",
+    "def": "Unique digital assets on a blockchain (art, music, collectibles, etc.)."
+  },
+  {
+    "term": "Node",
+    "def": "A computer that participates in maintaining and validating a blockchain."
+  },
+  {
+    "term": "Nonce",
+    "def": "A number used once; in mining it’s the variable adjusted to find a valid block hash."
+  },
+  {
+    "term": "Network Effect",
+    "def": "The increasing value of a blockchain/project as more people use it."
+  },
+  {
+    "term": "Native Token",
+    "def": "The main coin of a blockchain (e.g., ETH for Ethereum, SOL for Solana)."
+  },
+  {
+    "term": "Nakamoto Consensus",
+    "def": "The Proof-of-Work consensus model pioneered by Bitcoin."
+  },
+  {
+    "term": "Neobank",
+    "def": "Digital bank sometimes tied to crypto on-ramps/off-ramps."
+  },
+  {
+    "term": "Nested Exchange",
+    "def": "Hidden exchanges running on top of bigger platforms, often with shady activity. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "NGMI (Not Gonna Make It)",
+    "def": "Meme for traders/investors who panic-sell, FUD, or miss opportunities (opposite of GMI)."
+  },
+  {
+    "term": "Normie",
+    "def": "Non-crypto person; someone outside the degen/meme community."
+  },
+  {
+    "term": "NFA (Not Financial Advice)",
+    "def": "Meme disclaimer used by traders posting alpha calls. Nuked 💥 – Meme for when a portfolio/coin crashes massively."
+  },
+  {
+    "term": "Nano Pump",
+    "def": "Tiny, short-lived pump in a meme coin."
+  },
+  {
+    "term": "NEET Coin",
+    "def": "Joke coin referencing “Not in Education, Employment, or Training.” Nyan Cat Token 🐱🌈 – Meme coins inspired by old-school internet memes like Nyan Cat."
+  },
+  {
+    "term": "Nostalgia Coins",
+    "def": "Meme tokens created around 2000s/early internet culture references. Nothingburger 🍔 – Meme phrase for news/FUD that ends up not affecting price."
+  },
+  {
+    "term": "On-Chain",
+    "def": "Transactions or data recorded directly on a blockchain (as opposed to off-chain)."
+  },
+  {
+    "term": "Off-Chain",
+    "def": "Transactions or processes handled outside the blockchain to reduce fees/speed things up."
+  },
+  {
+    "term": "Oracle",
+    "def": "A service that feeds real-world data (like prices) into blockchains for smart contracts."
+  },
+  {
+    "term": "Order Book",
+    "def": "A record of buy/sell orders on an exchange."
+  },
+  {
+    "term": "OTC (Over-The-Counter)",
+    "def": "Peer-to-peer trading done directly, often in large amounts, outside of exchanges."
+  },
+  {
+    "term": "Optimistic Rollup",
+    "def": "A Layer-2 scaling solution that processes transactions off-chain but posts results on-chain, assuming validity unless disputed."
+  },
+  {
+    "term": "Omnichain",
+    "def": "Protocols/tokens designed to work across multiple blockchains seamlessly."
+  },
+  {
+    "term": "OpenSea",
+    "def": "The largest NFT marketplace, often memed for scams, fees, or culture."
+  },
+  {
+    "term": "Oversold",
+    "def": "Technical analysis term for an asset considered too cheap relative to recent price action. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "OG",
+    "def": "“Original Gangster,” term for early adopters or long-time crypto holders."
+  },
+  {
+    "term": "Overleveraged",
+    "def": "Meme slang for traders using too much borrowed money before getting liquidated."
+  },
+  {
+    "term": "Oof 😬",
+    "def": "Meme response to big losses or liquidations."
+  },
+  {
+    "term": "One-Way Ticket 🚀🌕",
+    "def": "Meme for coins believed to only go up (usually ironically). Onion Token 🧅 – Joke coin referencing internet “layers” memes or anonymous onion routing (Tor)."
+  },
+  {
+    "term": "Ohmies",
+    "def": "Community slang for Olympus DAO holders (OHM token), often memed as ponzinomics."
+  },
+  {
+    "term": "Overhyped Coin",
+    "def": "Meme for tokens that run mostly on hype before crashing. Oinking Coins 🐷 – Pig-themed meme coins that followed after dog and frog tokens."
+  },
+  {
+    "term": "Only Up 📈",
+    "def": "Meme phrase (and also a scam coin at times) reflecting degen bullish optimism."
+  },
+  {
+    "term": "Pair (Trading Pair)",
+    "def": "A market between two assets (e.g., DOGE/USDT)."
+  },
+  {
+    "term": "Paper Wallet",
+    "def": "A physical printout of private/public keys for cold storage. Paper Hands ✋📄 – Meme slang for selling too early, opposite of Diamond Hands."
+  },
+  {
+    "term": "Peg",
+    "def": "Fixed price of a stablecoin to another asset (e.g., $1). Peg"
+  },
+  {
+    "term": "Loss / Depeg",
+    "def": "When a stablecoin loses its peg (UST famously depegged from $1)."
+  },
+  {
+    "term": "Permissionless",
+    "def": "Open blockchain systems where anyone can participate without approval."
+  },
+  {
+    "term": "PoA (Proof of Authority)",
+    "def": "Consensus mechanism where validators are chosen based on identity/reputation."
+  },
+  {
+    "term": "PoS (Proof of Stake)",
+    "def": "Consensus mechanism where validators are chosen based on staked coins."
+  },
+  {
+    "term": "PoW (Proof of Work)",
+    "def": "Mining-based consensus mechanism used by Bitcoin."
+  },
+  {
+    "term": "Private Key",
+    "def": "Secret key that allows you to spend coins from a wallet."
+  },
+  {
+    "term": "Protocol",
+    "def": "A set of rules and smart contracts that define how a blockchain or DeFi platform works."
+  },
+  {
+    "term": "Public Key",
+    "def": "A wallet address derived from a private key, visible for receiving crypto. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Pajeet",
+    "def": "Meme slang (originating on biz boards) mocking retail traders who buy high, sell low."
+  },
+  {
+    "term": "Pepe (PEPE) 🐸",
+    "def": "Iconic frog meme turned into one of the largest meme coins."
+  },
+  {
+    "term": "Pepega / Peepo",
+    "def": "Variations of Pepe memes used in coin communities."
+  },
+  {
+    "term": "Pump & Dump 📈📉",
+    "def": "Coordinated hype followed by a mass sell-off."
+  },
+  {
+    "term": "Pumpamentals",
+    "def": "Meme for fake fundamentals created to hype a coin."
+  },
+  {
+    "term": "Ponzi",
+    "def": "Meme accusation for unsustainable tokenomics (often in DeFi or meme coins)."
+  },
+  {
+    "term": "P&D Group",
+    "def": "Telegram/Discord groups organizing pump-and-dump schemes."
+  },
+  {
+    "term": "Play-to-Earn (P2E)",
+    "def": "Gaming model where players earn tokens (Axie Infinity, etc.)."
+  },
+  {
+    "term": "Pleb",
+    "def": "Meme slang for small-time retail traders, opposite of whales."
+  },
+  {
+    "term": "Pink Sheet Coin",
+    "def": "Joke for shady, low-cap meme tokens. Poo Coin 💩 – Slang for scammy meme coins; also an actual site (PooCoin.app) for tracking BSC tokens. PancakeSwap (CAKE) 🥞 – Popular DEX on Binance Smart Chain, hub for meme coin launches. Penis Coin / Phallic Tokens 🍆 – Joke coins built purely for shock meme value."
+  },
+  {
+    "term": "Parabolic 🚀",
+    "def": "Meme for when a coin shoots up exponentially in price."
+  },
+  {
+    "term": "Paper Trading",
+    "def": "Practicing trades with no real money (mocked in meme circles)."
+  },
+  {
+    "term": "QR Code",
+    "def": "Common way to share wallet addresses for payments."
+  },
+  {
+    "term": "Quant (QNT)",
+    "def": "A blockchain interoperability project, sometimes memed as a “hidden gem.”"
+  },
+  {
+    "term": "Quantum Computing Risk",
+    "def": "Concern that future quantum computers could break blockchain cryptography."
+  },
+  {
+    "term": "Quorum",
+    "def": "Minimum number of participants required for a blockchain governance vote to be valid."
+  },
+  {
+    "term": "Quickswap (QUICK)",
+    "def": "A DEX on Polygon, often used for smaller altcoins and meme coins."
+  },
+  {
+    "term": "Queue Transaction",
+    "def": "Pending transactions waiting in the mempool before confirmation. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "QFL (Quick Fingers Luke)",
+    "def": "Meme trading strategy based on buying coins after they crash hard (named after a trader on forums)."
+  },
+  {
+    "term": "QAnon Coin / Q Meme Tokens",
+    "def": "Joke or conspiracy-themed meme coins inspired by internet subcultures."
+  },
+  {
+    "term": "Quest Tokens",
+    "def": "Meme/game coins tied to “adventure” or RPG themes, usually degen bait."
+  },
+  {
+    "term": "Quick Flip",
+    "def": "Meme slang for buying a meme coin/NFT and selling almost immediately for small profit. Quack Coin 🦆 – Duck-themed meme coins that rode the wave of animal tokens (DOGE, SHIB, PEPE, etc.)."
+  },
+  {
+    "term": "Quiet Accumulation",
+    "def": "Meme phrase for whales buying up meme coins before a pump without attracting attention."
+  },
+  {
+    "term": "Rug Pull",
+    "def": "A scam where developers drain liquidity or abandon a project, leaving investors with worthless tokens."
+  },
+  {
+    "term": "ROI (Return on Investment)",
+    "def": "Percentage gain or loss on a crypto investment."
+  },
+  {
+    "term": "RPC (Remote Procedure Call)",
+    "def": "Tech that allows wallets and dApps to interact with blockchains (e.g., adding custom RPCs in MetaMask). REKT 💀 – Meme slang for heavy financial losses."
+  },
+  {
+    "term": "Reserve Currency",
+    "def": "A token intended to act as a base unit of value across DeFi ecosystems (e.g., OHM attempted this)."
+  },
+  {
+    "term": "Rollup",
+    "def": "A Layer 2 scaling solution that bundles many transactions into one."
+  },
+  {
+    "term": "Reward Token",
+    "def": "Tokens distributed as staking, farming, or mining rewards."
+  },
+  {
+    "term": "Replacement Transaction (RBF)",
+    "def": "Bitcoin feature letting you replace an unconfirmed transaction with one that pays a higher fee."
+  },
+  {
+    "term": "Rebase Token",
+    "def": "An elastic supply token whose supply adjusts algorithmically (e.g., AMPL). 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Red Candle 🔻",
+    "def": "Meme for price going down."
+  },
+  {
+    "term": "Robinhood Effect",
+    "def": "When a token (like DOGE or SHIB) pumps after being listed on Robinhood. Roadmap Meme 🗺️ – Joke about projects posting ambitious roadmaps but delivering nothing."
+  },
+  {
+    "term": "Retard Strength (RSI)",
+    "def": "Ironic meme use of “Relative Strength Index” in trading jokes. Ramen Investor 🍜 – Meme for broke traders living on ramen after getting rekt."
+  },
+  {
+    "term": "Rekt Army",
+    "def": "Meme nickname for people who consistently lose trades. Rat Coin / Rodent Tokens 🐀 – Meme tokens spun out of the “animal coin” hype."
+  },
+  {
+    "term": "Ref Link Shillers",
+    "def": "Meme about influencers endlessly shilling referral links to exchanges. Rise & Grind (R&G) ☕ – Crypto Twitter morning meme about chasing pumps."
+  },
+  {
+    "term": "Rebound Pump",
+    "def": "Meme for a dead coin bouncing a little after a big dump."
+  },
+  {
+    "term": "Satoshi (SAT)",
+    "def": "The smallest unit of Bitcoin (0.00000001 BTC)."
+  },
+  {
+    "term": "Satoshi Nakamoto",
+    "def": "The pseudonymous creator of Bitcoin."
+  },
+  {
+    "term": "Scalability",
+    "def": "A blockchain’s ability to handle more transactions as usage grows."
+  },
+  {
+    "term": "Scaling Solution",
+    "def": "Tech like rollups, sharding, or sidechains that improve throughput."
+  },
+  {
+    "term": "Schnorr Signatures",
+    "def": "A cryptographic signature scheme adopted in Bitcoin upgrades. Seed Phrase 🌱 – List of 12–24 words used to back up a crypto wallet."
+  },
+  {
+    "term": "SegWit (Segregated Witness)",
+    "def": "Bitcoin upgrade that increased transaction capacity."
+  },
+  {
+    "term": "Sell Wall",
+    "def": "A large order at a specific price level blocking upward price movement."
+  },
+  {
+    "term": "Sharding",
+    "def": "Splitting a blockchain into smaller pieces to increase efficiency."
+  },
+  {
+    "term": "Sidechain",
+    "def": "A blockchain connected to a main chain, allowing assets to move between them."
+  },
+  {
+    "term": "Slippage",
+    "def": "The difference between expected trade price and executed trade price."
+  },
+  {
+    "term": "Smart Contract",
+    "def": "Self-executing code on a blockchain that automates agreements."
+  },
+  {
+    "term": "Snapshot",
+    "def": "A record of blockchain state at a certain block, used for airdrops or governance votes."
+  },
+  {
+    "term": "Soft Fork",
+    "def": "A backward-compatible update to a blockchain."
+  },
+  {
+    "term": "Stablecoin",
+    "def": "A token pegged to fiat (e.g., USDT, USDC, DAI)."
+  },
+  {
+    "term": "Staking",
+    "def": "Locking tokens to secure a blockchain or earn rewards."
+  },
+  {
+    "term": "Stop Loss",
+    "def": "Order to automatically sell if price drops to a certain level."
+  },
+  {
+    "term": "Supply Shock",
+    "def": "A sudden reduction in available tokens (burns, halvings, etc.)."
+  },
+  {
+    "term": "Synthetic Asset",
+    "def": "Blockchain token representing another asset (stocks, fiat, etc.). 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "SHIB (Shiba Inu) 🐕",
+    "def": "One of the biggest meme coins, inspired by DOGE."
+  },
+  {
+    "term": "Shiba Army / SHIBArmy",
+    "def": "Community around Shiba Inu."
+  },
+  {
+    "term": "Shibarium",
+    "def": "Shiba Inu’s L2 blockchain."
+  },
+  {
+    "term": "Shill",
+    "def": "Aggressively promoting a coin, usually in hopes of pumping your bags. Shitcoin 💩 – Any worthless or scammy crypto (also used ironically for meme coins)."
+  },
+  {
+    "term": "Slap Buy / Slap Sell",
+    "def": "Meme slang for instantly market buying or selling. Slurp Juice 🥤 – Meme term for tokens/NFTs that “power up” others in degenerate ways. Sniper Bot 🤖 – Automated bot used to buy meme coins the second they launch."
+  },
+  {
+    "term": "Soontm",
+    "def": "Meme when devs delay launches endlessly but keep promising “soon.”"
+  },
+  {
+    "term": "Solana (SOL)",
+    "def": "Popular L1 blockchain, memed as “degen playground” for meme coins."
+  },
+  {
+    "term": "Saylor",
+    "def": "Refers to Michael Saylor, often memed for being ultra-bullish on Bitcoin. Steak / Staking Meme 🥩 – Community jokes around staking."
+  },
+  {
+    "term": "Simp Token",
+    "def": "Meme for coins themed around “simp culture.”"
+  },
+  {
+    "term": "Scam Pump",
+    "def": "Quick hype spike that ends in a rug."
+  },
+  {
+    "term": "Strong Hands",
+    "def": "Opposite of paper hands, meme for never selling."
+  },
+  {
+    "term": "Supercycle",
+    "def": "Meme about crypto entering a never-ending bull run."
+  },
+  {
+    "term": "Space Coin / Moon Coin 🚀🌕",
+    "def": "Meme coins branded with space/moon themes."
+  },
+  {
+    "term": "Szn (Season)",
+    "def": "Meme slang, e.g., “Meme Coin Szn,” “Alt Szn,” “Rug Szn.”"
+  },
+  {
+    "term": "TA (Technical Analysis)",
+    "def": "Studying charts and indicators to predict price movements."
+  },
+  {
+    "term": "Taker",
+    "def": "A trader who removes liquidity from the order book by filling existing orders."
+  },
+  {
+    "term": "TGE (Token Generation Event)",
+    "def": "When a new token is officially minted and distributed."
+  },
+  {
+    "term": "Testnet",
+    "def": "A blockchain network for testing before mainnet deployment."
+  },
+  {
+    "term": "Tokenomics",
+    "def": "The economic design of a crypto (supply, burns, rewards, emissions)."
+  },
+  {
+    "term": "TPS (Transactions Per Second)",
+    "def": "Measure of blockchain throughput."
+  },
+  {
+    "term": "Trading Volume",
+    "def": "Total amount of a coin traded over a set time."
+  },
+  {
+    "term": "Transaction Fee",
+    "def": "Fee paid to miners/validators for processing transactions."
+  },
+  {
+    "term": "Trezor",
+    "def": "Popular hardware wallet for secure crypto storage."
+  },
+  {
+    "term": "Trustless",
+    "def": "A feature of blockchain systems where participants don’t need to trust each other, only the code."
+  },
+  {
+    "term": "TVL (Total Value Locked)",
+    "def": "The amount of funds locked in a DeFi protocol. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "Token",
+    "def": "General slang for any coin, often used interchangeably with “shitcoin” in degen circles."
+  },
+  {
+    "term": "Tether (USDT)",
+    "def": "The largest stablecoin, often memed for “printing unlimited money.”"
+  },
+  {
+    "term": "To the Moon 🚀🌕",
+    "def": "The most famous meme phrase for massive price increases."
+  },
+  {
+    "term": "Tank",
+    "def": "Meme slang for price crashing."
+  },
+  {
+    "term": "Trug (Trust Rug)",
+    "def": "Meme term for projects that pretend to be safe but rug anyway."
+  },
+  {
+    "term": "Telegram Group Degens",
+    "def": "Meme about pump groups hyping scam tokens on Telegram."
+  },
+  {
+    "term": "Turbo Token",
+    "def": "Any super-fast pump coin (sometimes named literally “Turbo”)."
+  },
+  {
+    "term": "TRX (Tron)",
+    "def": "Blockchain by Justin Sun, often memed in crypto Twitter."
+  },
+  {
+    "term": "Twitter Fingers",
+    "def": "Meme phrase when influencers shill or fight about meme coins on Twitter/X."
+  },
+  {
+    "term": "Tornado Cash 🌪️",
+    "def": "Ethereum mixer for anonymizing transactions, memed after U.S. sanctions."
+  },
+  {
+    "term": "Token Rug",
+    "def": "Meme coin where devs drain liquidity suddenly."
+  },
+  {
+    "term": "Tendies 🍗",
+    "def": "Meme slang for profits, carried over from WallStreetBets culture."
+  },
+  {
+    "term": "Tiny Cap",
+    "def": "Meme for ultra-low market cap coins seen as “lottery tickets.”"
+  },
+  {
+    "term": "TradeFi / TradFi",
+    "def": "Meme name for traditional finance, mocked by degen culture."
+  },
+  {
+    "term": "Turbo Apes 🦍",
+    "def": "Meme slang for degens aping into new meme coins at lightning speed."
+  },
+  {
+    "term": "Token Gated",
+    "def": "Meme for NFTs/coins requiring ownership to access content or communities."
+  },
+  {
+    "term": "UBI Token",
+    "def": "Crypto projects tied to Universal Basic Income ideas. Ultrasound Money 🦇🔊 – Meme around Ethereum post-merge, since ETH supply can become deflationary."
+  },
+  {
+    "term": "Unbanked",
+    "def": "Term for people excluded from traditional banking, often used in crypto adoption narratives."
+  },
+  {
+    "term": "Unconfirmed Transaction",
+    "def": "A transaction broadcast to the network but not yet included in a block."
+  },
+  {
+    "term": "UTXO (Unspent Transaction Output)",
+    "def": "Fundamental model for Bitcoin and similar blockchains; tracks spendable balances."
+  },
+  {
+    "term": "Utility Token",
+    "def": "A crypto designed for use within an ecosystem (not just speculation). 🔹 Meme Coins & Community Slang Uniswap (UNI) 🦄 – Major Ethereum DEX, often memed for “ape-ing into new tokens.”"
+  },
+  {
+    "term": "Unrekt 😎",
+    "def": "Meme for recovering after a losing streak."
+  },
+  {
+    "term": "Up Only 📈",
+    "def": "Meme phrase for unstoppable bullishness."
+  },
+  {
+    "term": "Useless Token",
+    "def": "Joke coins deliberately made with no purpose. Uranus Coin 🪐 – Joke name for meme coins based on space/body humor. Underdog Coin 🐶 – Meme token category hyped as “next DOGE/SHIB.”"
+  },
+  {
+    "term": "Ultimate Degen",
+    "def": "Meme label for someone who YOLOs into the riskiest coins. UNO Reverse Token 🃏 – Meme coin idea of reversing rugs or flipping the market."
+  },
+  {
+    "term": "Validator",
+    "def": "A participant in proof-of-stake networks who secures the blockchain by validating transactions and proposing new blocks."
+  },
+  {
+    "term": "Vaporware",
+    "def": "Crypto projects that sound amazing on paper but never actually deliver."
+  },
+  {
+    "term": "Venture Capital (VC)",
+    "def": "Investment firms backing early-stage crypto projects, often accused of dumping on retail later."
+  },
+  {
+    "term": "Vesting",
+    "def": "Schedule that locks tokens for team/investors and releases them gradually."
+  },
+  {
+    "term": "Volatility",
+    "def": "The degree of price fluctuation in a crypto asset."
+  },
+  {
+    "term": "Volume",
+    "def": "The total amount traded of a coin over a specific time."
+  },
+  {
+    "term": "VR (Virtual Reality)",
+    "def": "Often tied to metaverse projects with tokens/NFTs."
+  },
+  {
+    "term": "Vitalik Buterin",
+    "def": "Co-founder of Ethereum, often memed as the “wizard” of crypto. 🔹 Meme Coins & Community Slang VEGAN Token 🌱 – Example of random food-themed meme coins."
+  },
+  {
+    "term": "Very Early",
+    "def": "Meme phrase for buying into a project at its earliest stage."
+  },
+  {
+    "term": "Vitalik Dump",
+    "def": "Meme about ETH co-founder selling gifted meme coins (like SHIB in 2021)."
+  },
+  {
+    "term": "Vibe Token ✨",
+    "def": "Joke meme coins built around “vibes only.” V anity"
+  },
+  {
+    "term": "Viral Pump",
+    "def": "Meme slang for when a token goes up just because it spreads virally on Twitter/Telegram."
+  },
+  {
+    "term": "VC Dump",
+    "def": "Meme accusation that venture capitalists sell their tokens on retail holders."
+  },
+  {
+    "term": "Voting Power",
+    "def": "Meme/gov slang for governance tokens giving holders “say” in a DAO. Crypto & Meme Coin Terms Starting with W:"
+  },
+  {
+    "term": "Wallet",
+    "def": "A crypto storage tool (hot wallet = online, cold wallet = offline)."
+  },
+  {
+    "term": "WASM (WebAssembly)",
+    "def": "A virtual machine format used by some blockchains for running smart contracts."
+  },
+  {
+    "term": "Watchlist",
+    "def": "A list of tokens a trader is monitoring."
+  },
+  {
+    "term": "WBTC (Wrapped Bitcoin)",
+    "def": "ERC-20 token representing Bitcoin on Ethereum. Whale 🐋 – An individual/entity holding massive amounts of a token, able to move markets."
+  },
+  {
+    "term": "Whitelist",
+    "def": "A pre-approved list of addresses allowed to join token sales or NFT mints."
+  },
+  {
+    "term": "Wrapped Token",
+    "def": "A tokenized version of an asset bridged to another chain (e.g., WETH, WBNB)."
+  },
+  {
+    "term": "Withdrawal",
+    "def": "Moving funds out of an exchange or protocol."
+  },
+  {
+    "term": "WIF (What Is Filecoin / What If)",
+    "def": "Can also reference dogwifhat (WIF), a Solana meme coin."
+  },
+  {
+    "term": "Work Token",
+    "def": "A token that grants the right to perform certain tasks or earn fees in a network. 🔹 Meme Coins & Community Slang WAGMI (“We’re"
+  },
+  {
+    "term": "All Gonna Make It”)",
+    "def": "Iconic crypto meme of optimism (opposite of NGMI). Wen Lambo? 🚗 – Meme phrase asking when a coin will pump enough to afford a Lamborghini. Wen Moon? 🌕 – Meme phrase asking when price will skyrocket."
+  },
+  {
+    "term": "Wif Hat (WIF) 🧢",
+    "def": "Popular Solana meme coin “dogwifhat.”"
+  },
+  {
+    "term": "Wall of Buys / Sells",
+    "def": "Meme for huge green/red order book walls. Whalecum 🐋😏 – Degen meme greeting whales entering a Telegram group."
+  },
+  {
+    "term": "Wojak 😢",
+    "def": "Classic meme character used in crypto to depict emotions (rekt, FOMO, paper hands, etc.). Winterns ❄️ – Meme for inexperienced analysts/devs posting bad takes. Woofpaper 🐶 – Shiba Inu’s meme version of a whitepaper."
+  },
+  {
+    "term": "Wrapped Rugs",
+    "def": "Meme for scam coins that keep relaunching under new names."
+  },
+  {
+    "term": "Weekend Dump 📉",
+    "def": "Meme belief that coins often dip on weekends. Wifey Token 💍 – Meme coins themed around “crypto wives/girlfriends.”"
+  },
+  {
+    "term": "Wizard / Wizard Token 🧙",
+    "def": "Meme characterization of Vitalik or devs doing “magic.”"
+  },
+  {
+    "term": "Wrecked / Wreck City",
+    "def": "Variation of REKT, used in memes."
+  },
+  {
+    "term": "XRP",
+    "def": "Token of the Ripple network, often memed for its “army” of hardcore supporters."
+  },
+  {
+    "term": "XRD (Radix)",
+    "def": "Layer-1 blockchain token, sometimes memed in degen groups."
+  },
+  {
+    "term": "XTZ (Tezos)",
+    "def": "Smart contract blockchain, used in NFT culture."
+  },
+  {
+    "term": "XCH (Chia)",
+    "def": "Blockchain based on “proof of space and time.”"
+  },
+  {
+    "term": "XMR (Monero)",
+    "def": "Privacy-focused cryptocurrency, memed as “coin for shadow ninjas.”"
+  },
+  {
+    "term": "X-Chain",
+    "def": "Avalanche’s chain for simple asset transfers."
+  },
+  {
+    "term": "X-to-Earn",
+    "def": "General model (play-to-earn, move-to-earn, sleep-to-earn, etc.) often memed as Ponzi-like. xNFTs – Experimental NFT format used in Solana ecosystem. 🔹 Meme Coins & Community Slang"
+  },
+  {
+    "term": "X (formerly Twitter)",
+    "def": "Core platform for crypto memes and shilling. X Army / XRP Army 💪 – Hardcore community of XRP supporters, infamous for cult-like memes."
+  },
+  {
+    "term": "X Coin",
+    "def": "Generic label for mysterious, new, or unbranded tokens (“the next X”)."
+  },
+  {
+    "term": "X Doubler Scam",
+    "def": "Meme for sketchy Telegram bots promising to double your ETH/BTC."
+  },
+  {
+    "term": "Xen Crypto (XEN)",
+    "def": "A free-to-mint token project, memed as infinite supply inflation."
+  },
+  {
+    "term": "Xtreme Pump 📈",
+    "def": "Meme phrase for a sudden viral pump. XMAS Token 🎄 – Joke seasonal meme coins that pop up around Christmas. XXX Token 🔞 – Adult-themed meme coins, often low-effort."
+  },
+  {
+    "term": "Yield",
+    "def": "The return earned from staking, lending, or providing liquidity."
+  },
+  {
+    "term": "Yield Farming",
+    "def": "Earning rewards by providing liquidity or moving funds between DeFi protocols."
+  },
+  {
+    "term": "Yearn Finance (YFI)",
+    "def": "A DeFi protocol and governance token founded by Andre Cronje, once memed as “DeFi blue-chip.”"
+  },
+  {
+    "term": "YTD (Year-to-Date)",
+    "def": "A performance metric for an asset’s return since the beginning of the year."
+  },
+  {
+    "term": "Yen Stablecoin",
+    "def": "Stablecoins pegged to the Japanese yen, sometimes experimented with in Asian markets. 🔹 Meme Coins & Community Slang y00ts 😺 – Popular NFT collection tied to DeGods, heavily memed in NFT Twitter culture."
+  },
+  {
+    "term": "YOLO (You Only Live Once)",
+    "def": "Meme phrase for aping into risky coins without hesitation."
+  },
+  {
+    "term": "YUGE",
+    "def": "Meme slang (Trump-style “huge”), used in coin shills like “next YUGE pump.” Yield Chad 🧑‍🌾 – Meme persona for farmers hopping between protocols for max returns."
+  },
+  {
+    "term": "Yellow Candle",
+    "def": "Meme joke for sideways trading (between green and red). Yam Token 🍠 – Meme DeFi farming token (YAM) that became a cult moment in 2020."
+  },
+  {
+    "term": "Yiff Coin 🐺",
+    "def": "Joke/furry meme token occasionally spun up in degen spaces."
+  },
+  {
+    "term": "Yank Rug",
+    "def": "Meme phrase for pulling liquidity suddenly (“yanking the rug”)."
+  },
+  {
+    "term": "ZEC (Zcash)",
+    "def": "Privacy-focused cryptocurrency with shielded transactions."
+  },
+  {
+    "term": "ZIL (Zilliqa)",
+    "def": "Blockchain platform known for early sharding implementation."
+  },
+  {
+    "term": "ZK (Zero-Knowledge)",
+    "def": "Cryptographic proofs allowing one party to prove information without revealing it."
+  },
+  {
+    "term": "ZK-Rollup",
+    "def": "Layer-2 scaling solution using zero-knowledge proofs to batch transactions."
+  },
+  {
+    "term": "ZKP (Zero-Knowledge Proof)",
+    "def": "Core technology for privacy and scalability in blockchain."
+  },
+  {
+    "term": "Zombie Chain",
+    "def": "A dead blockchain with no users or development."
+  },
+  {
+    "term": "Zombie Token",
+    "def": "A worthless token still floating around with no liquidity or purpose. 🔹 Meme Coins & Community Slang Zebra Coin 🦓 – Example of animal-themed meme tokens after DOGE/SHIB/PEPE trends."
+  },
+  {
+    "term": "Zaddy Token 😎",
+    "def": "Meme token themed around internet slang for a stylish older man."
+  },
+  {
+    "term": "Zoomer Coins",
+    "def": "Meme label for coins hyped by younger generations."
+  },
+  {
+    "term": "Zerg Rush 👾",
+    "def": "Meme slang from gaming, used for rapid swarm-buying of a meme coin."
+  },
+  {
+    "term": "Zero Utility",
+    "def": "Meme insult for coins with no function except speculation. Zoot Coin 🐒 – Example of low-effort animal meme tokens. Zuckerbucks 🧑‍💻💵 – Meme name for Meta’s (Facebook’s) attempts at stablecoins/digital money. Zany Token 🤪 – Catch-all term for absurd meme coins."
+  }
+];
+
+const ALL_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const lettersEl = document.getElementById('letters');
+const content = document.getElementById('content');
+const search = document.getElementById('search');
+const listWrap = document.getElementById('listWrap');
+const sidebar = document.querySelector('nav.sidebar');
+let activeLetter = 'A'; // default view
+let query = '';
+
+function fitListToSidebar() {
+  // Ensure the list height never exceeds the visible height of the sidebar
+  const h = sidebar.getBoundingClientRect().height;
+  listWrap.style.maxHeight = Math.max(220, Math.floor(h)) + 'px';
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  try {
+    const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+    return text.replace(re, '<mark>$1</mark>');
+  } catch(e) { return text; }
+}
+
+function groupByLetter(data) {
+  const map = new Map();
+  data.forEach(i => {
+    const L = i.term[0].toUpperCase();
+    if (!map.has(L)) map.set(L, []);
+    map.get(L).push(i);
+  });
+  ALL_LETTERS.forEach(L => { if (!map.has(L)) map.set(L, []); });
+  return map;
+}
+
+function buildLetters() {
+  const buttons = ALL_LETTERS.map(L => `<button type="button" data-letter="${L}" class="${L===activeLetter?'active':''}">${L}</button>`);
+  buttons.push('<button type="button" data-letter="ALL" class="all">ALL</button>');
+  lettersEl.innerHTML = buttons.join('');
+}
+
+function render() {
+  content.innerHTML = "";
+  let dataset = GLOSSARY_DATA;
+
+  if (query) {
+    dataset = dataset.filter(x => (x.term + ' ' + x.def).toLowerCase().includes(query.toLowerCase()));
+  }
+
+  if (activeLetter === 'ALL') {
+    const byL = groupByLetter(dataset.sort((a,b)=> a.term.localeCompare(b.term)));
+    byL.forEach((items, L) => {
+      const sec = document.createElement('section');
+      sec.className = 'letter'; sec.id = L;
+      const h2 = document.createElement('h2'); h2.textContent = L;
+      sec.appendChild(h2);
+
+      if (!items.length) {
+        const d = document.createElement('div'); d.className='empty'; d.textContent='No entries.'; sec.appendChild(d);
+      } else {
+        const dl = document.createElement('dl');
+        items.forEach(it => { dl.innerHTML += `<dt>${highlight(it.term, query)}<\/dt><dd>${highlight(it.def, query)}<\/dd>`; });
+        sec.appendChild(dl);
+      }
+      content.appendChild(sec);
+    });
+  } else {
+    const L = activeLetter;
+    const items = dataset.filter(x => x.term[0].toUpperCase() === L).sort((a,b)=> a.term.localeCompare(b.term));
+    const sec = document.createElement('section');
+    sec.className = 'letter'; sec.id = L;
+    const h2 = document.createElement('h2'); h2.textContent = L;
+    sec.appendChild(h2);
+
+    if (!items.length) {
+      const d = document.createElement('div'); d.className='empty'; d.textContent='No entries under ' + L + (query? ' for current search' : ''); sec.appendChild(d);
+    } else {
+      const dl = document.createElement('dl');
+      items.forEach(it => { dl.innerHTML += `<dt>${highlight(it.term, query)}<\/dt><dd>${highlight(it.def, query)}<\/dd>`; });
+      sec.appendChild(dl);
+    }
+    content.appendChild(sec);
+  }
+  listWrap.scrollTop = 0;
+  fitListToSidebar();
+}
+
+lettersEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-letter]');
+  if (!btn) return;
+  activeLetter = btn.dataset.letter;
+  buildLetters(); render();
+});
+
+search.addEventListener('input', (e) => { query = e.target.value.trim(); render(); });
+window.addEventListener('load', fitListToSidebar);
+window.addEventListener('resize', fitListToSidebar);
+
+// init
+buildLetters(); render();
+</script>
+</body>
+</html>
